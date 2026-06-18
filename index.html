@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Nindya Regulatory Compliance System</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#F8F9FA;color:#343A40;min-height:100vh}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:#F1F3F5}
+::-webkit-scrollbar-thumb{background:#CED4DA;border-radius:3px}
+input,select,button{font-family:inherit}
+table{border-collapse:collapse;width:100%}
+
+/* Navbar */
+.navbar{background:#fff;border-bottom:1px solid #E9ECEF;display:flex;align-items:center;padding:0 20px;height:52px;position:sticky;top:0;z-index:200;box-shadow:0 1px 4px rgba(0,0,0,.07)}
+.logo{display:flex;align-items:center;gap:8px;margin-right:28px;flex-shrink:0}
+.logo-box{width:32px;height:32px;background:#1B3A6B;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:12px}
+.logo-text{line-height:1.2}
+.logo-text div:first-child{font-size:11px;font-weight:800;color:#1B3A6B}
+.logo-text div:last-child{font-size:9px;color:#ADB5BD;font-weight:600;letter-spacing:1px}
+.nav-links{display:flex;gap:2px;flex:1;overflow-x:auto}
+.nav-btn{background:none;border:none;cursor:pointer;padding:14px;font-size:13px;font-weight:400;color:#6C757D;border-bottom:2px solid transparent;white-space:nowrap;transition:all .15s}
+.nav-btn.active{font-weight:700;color:#1B3A6B;border-bottom-color:#1B3A6B}
+.nav-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.nav-search{border:1px solid #DEE2E6;border-radius:6px;padding:5px 10px;font-size:12px;width:160px;outline:none;color:#495057}
+.avatar{width:30px;height:30px;background:#1B3A6B;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700;cursor:pointer}
+
+/* Pages */
+.page{display:none}
+.page.active{display:block}
+
+/* Home */
+.home-wrap{padding:24px;max-width:1200px;margin:0 auto}
+.page-title{font-size:22px;font-weight:700;color:#1B3A6B;margin-bottom:4px}
+.page-sub{font-size:13px;color:#6C757D;margin-bottom:20px}
+.tab-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:8px}
+.tab-group{display:flex;gap:8px}
+.tab-btn{border:1px solid #DEE2E6;background:#fff;color:#495057;border-radius:20px;padding:6px 16px;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s}
+.tab-btn.active{background:#1B3A6B;color:#fff;border-color:#1B3A6B}
+.tab-actions{display:flex;gap:8px}
+.btn-outline{border:1px solid #DEE2E6;background:#fff;border-radius:6px;padding:6px 12px;font-size:12px;cursor:pointer;color:#495057}
+.btn-primary{background:#1B3A6B;color:#fff;border:none;border-radius:6px;padding:6px 14px;font-size:12px;cursor:pointer;font-weight:600}
+.btn-primary:hover{background:#2B5298}
+.btn-orange{background:#E05B18;color:#fff;border:none;border-radius:4px;padding:4px 10px;font-size:11px;cursor:pointer;font-weight:600;white-space:nowrap}
+
+/* Toggle */
+.toggle-wrap{display:flex;justify-content:flex-end;align-items:center;gap:8px;margin-bottom:16px}
+.toggle-label{font-size:12px;color:#6C757D}
+.toggle{width:40px;height:22px;border-radius:11px;cursor:pointer;position:relative;transition:background .2s;flex-shrink:0}
+.toggle-knob{position:absolute;top:2px;width:18px;height:18px;background:#fff;border-radius:50%;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+
+/* Cards */
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.card{background:#fff;border-radius:8px;border:1px solid #E9ECEF;padding:20px}
+.card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px}
+.card-title{font-size:13px;font-weight:700;color:#343A40}
+.card-sub{font-size:11px;color:#ADB5BD;margin-top:2px}
+.card-menu{color:#CED4DA;cursor:pointer;font-size:16px}
+.big-num{font-size:32px;font-weight:800;color:#343A40;margin:10px 0 6px}
+.pct-green{font-size:13px;font-weight:700;color:#2E7D32;margin-left:8px}
+.pct-red{font-size:13px;font-weight:700;color:#C62828;margin-left:8px}
+
+/* Donut chart */
+.donut-row{display:flex;align-items:center;gap:16px;margin-top:12px;flex-wrap:wrap}
+.donut-svg-wrap{position:relative;flex-shrink:0}
+.donut-label{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.donut-pct{font-size:18px;font-weight:800;color:#343A40}
+.donut-txt{font-size:9px;color:#ADB5BD}
+
+/* Bar mini */
+.bar-section{flex:1;min-width:120px}
+.bar-label-row{font-size:11px;color:#ADB5BD;margin-bottom:8px}
+.bar-row{display:flex;align-items:center;gap:6px;margin-bottom:6px}
+.bar-name{font-size:11px;color:#6C757D;width:46px}
+.bar-track{flex:1;background:#F1F3F5;border-radius:2px;height:10px}
+.bar-fill{height:100%;border-radius:2px}
+.bar-val{font-size:11px;color:#6C757D;width:16px;text-align:right}
+
+/* Group rows */
+.group-header{display:flex;justify-content:space-between;margin-bottom:6px}
+.group-col{font-size:11px;color:#ADB5BD;font-weight:600}
+.group-row{display:flex;justify-content:space-between;padding:4px 0;border-top:1px solid #F1F3F5}
+.group-name{font-size:11px;color:#495057;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding-right:8px}
+.group-val{font-size:11px;color:#495057;font-weight:600;flex-shrink:0}
+
+/* Bottom info bar */
+.info-bar{margin-top:12px;background:#FFF3E0;border-radius:6px;padding:8px 12px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.info-bar-txt{font-size:11px;color:#495057;flex:1}
+
+/* Group card header icon */
+.icon-circle-green{width:24px;height:24px;background:#2E7D32;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;flex-shrink:0}
+.icon-circle-gray{width:24px;height:24px;background:#DEE2E6;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#6C757D;font-size:13px;flex-shrink:0}
+.card-icon-row{display:flex;align-items:center;gap:8px}
+
+/* Reg framework summary */
+.rf-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.rf-stat-label{font-size:10px;color:#ADB5BD;font-weight:600;margin-bottom:4px}
+.rf-stat-val{font-size:26px;font-weight:800;color:#343A40}
+.rf-info-bar{background:#F8F9FA;border-radius:6px;padding:8px 12px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.rf-info-txt{font-size:11px;color:#495057;flex:1}
+.btn-navy-sm{background:#2B5298;color:#fff;border:none;border-radius:4px;padding:4px 10px;font-size:11px;cursor:pointer;font-weight:600;white-space:nowrap}
+
+/* Pie legend */
+.pie-row{display:flex;align-items:center;gap:12px;margin-top:8px;flex-wrap:wrap}
+.pie-legend{display:flex;flex-direction:column;gap:7px}
+.pie-legend-item{display:flex;align-items:center;gap:8px}
+.pie-dot{width:12px;height:12px;border-radius:2px;flex-shrink:0}
+.pie-lbl{font-size:11px;color:#495057}
+
+/* Layout with sidebar */
+.with-sidebar{display:flex;height:calc(100vh - 52px);overflow:hidden}
+.sidebar{width:190px;background:#fff;border-right:1px solid #E9ECEF;padding:16px;flex-shrink:0;overflow-y:auto}
+.sidebar-title{font-size:13px;font-weight:700;color:#343A40;margin-bottom:12px}
+.sidebar-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:6px;cursor:pointer;margin-bottom:4px;transition:background .1s}
+.sidebar-item.active{background:#EBF0FA}
+.sidebar-icon{font-size:14px}
+.sidebar-lbl{font-size:12px;color:#6C757D;font-weight:400}
+.sidebar-item.active .sidebar-lbl{color:#1B3A6B;font-weight:600}
+.content-area{flex:1;overflow:auto;display:flex;flex-direction:column}
+
+/* Compliance list */
+.comp-toolbar{display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.search-wrap{flex:1;position:relative;min-width:160px}
+.search-icon{position:absolute;left:9px;top:50%;transform:translateY(-50%);color:#CED4DA;font-size:14px;pointer-events:none}
+.search-input{width:100%;border:1px solid #DEE2E6;border-radius:6px;padding:7px 10px 7px 30px;font-size:12px;outline:none;color:#495057}
+.warn-bar{background:#FFF8E1;border:1px solid #FFE082;border-radius:6px;padding:7px 12px;font-size:11px;color:#7B5800;margin-bottom:8px;display:flex;justify-content:space-between}
+.comp-count{font-size:11px;color:#ADB5BD;margin-bottom:6px}
+.comp-list{flex:1;overflow:auto;background:#fff;border-radius:8px;border:1px solid #E9ECEF}
+.comp-item{padding:11px 14px;border-bottom:1px solid #F1F3F5;cursor:pointer;transition:background .1s}
+.comp-item:last-child{border-bottom:none}
+.comp-item:hover{background:#F8F9FA}
+.comp-item.selected{background:#EBF0FA}
+.comp-badges{display:flex;align-items:center;gap:8px;margin-bottom:5px;flex-wrap:wrap}
+.comp-code{font-size:12px;font-weight:700;color:#1B3A6B}
+.comp-desc{font-size:12px;color:#495057;line-height:1.5;padding-left:22px}
+
+/* Badges */
+.badge{border-radius:4px;padding:2px 8px;font-size:11px;font-weight:600;white-space:nowrap}
+.badge-comply{background:#E8F5E9;color:#2E7D32;border:1px solid #A5D6A7}
+.badge-progress{background:#FFF8E1;color:#F57F17;border:1px solid #FFE082}
+.badge-unassigned{background:#F1F3F5;color:#6C757D;border:1px solid #DEE2E6}
+.badge-high{background:#FFEBEE;color:#C62828;border:1px solid #FFCDD2}
+.badge-medium{background:#FFF3E0;color:#E65100;border:1px solid #FFCC80}
+.badge-low{background:#E3F2FD;color:#1565C0;border:1px solid #BBDEFB}
+.tag-new{background:#E8F5E9;color:#2E7D32;border-radius:4px;padding:1px 7px;font-size:11px;font-weight:600;margin-right:4px}
+.tag-active{background:#E3F2FD;color:#1565C0;border-radius:4px;padding:1px 7px;font-size:11px;font-weight:600;margin-right:4px}
+.tag-version{background:#F1F3F5;color:#6C757D;border-radius:4px;padding:1px 7px;font-size:11px;font-weight:600;margin-right:4px}
+
+/* Detail panel */
+.detail-panel{width:370px;background:#fff;border-left:1px solid #E9ECEF;display:flex;flex-direction:column;overflow:hidden;flex-shrink:0}
+.detail-scroll{flex:1;overflow:auto;padding:16px}
+.detail-sub-tabs{border-top:1px solid #E9ECEF;display:flex;overflow-x:auto;margin:0 -16px;padding-left:16px}
+.detail-tab{background:none;border:none;border-bottom:2px solid transparent;color:#6C757D;font-size:12px;font-weight:400;padding:10px 12px;cursor:pointer;white-space:nowrap}
+.detail-tab.active{border-bottom-color:#1B3A6B;color:#1B3A6B;font-weight:700}
+.info-field{margin-bottom:14px}
+.info-field-lbl{font-size:11px;color:#ADB5BD;font-weight:600;margin-bottom:2px}
+.info-field-val{font-size:12px;color:#343A40}
+.enforced-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+.enforced-left{display:flex;align-items:center;gap:8px}
+.enforced-icon{width:20px;height:20px;background:#2E7D32;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;flex-shrink:0}
+.enforced-name{font-size:12px;font-weight:600;color:#343A40}
+.enforced-date{font-size:11px;color:#ADB5BD}
+.btn-row{display:flex;gap:6px}
+.btn-sm{border:1px solid #DEE2E6;background:#fff;border-radius:4px;padding:4px 10px;font-size:11px;cursor:pointer;color:#495057}
+.detail-title{font-size:13px;font-weight:600;color:#1B3A6B;line-height:1.4;margin-bottom:12px}
+.action-btns{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+
+/* Regulatory framework */
+.rf-content{padding:24px;overflow:auto;flex:1}
+.rf-content h2{font-size:16px;font-weight:700;color:#343A40;margin-bottom:4px}
+.rf-content p{font-size:12px;color:#ADB5BD;margin-bottom:16px}
+.rf-toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px}
+.dropdown{position:relative;display:inline-block}
+.dropdown-menu{position:absolute;right:0;top:110%;background:#fff;border:1px solid #E9ECEF;border-radius:6px;box-shadow:0 4px 12px rgba(0,0,0,.1);z-index:100;min-width:180px;display:none}
+.dropdown-menu.open{display:block}
+.dropdown-item{padding:8px 14px;font-size:12px;cursor:pointer;color:#495057;border-bottom:1px solid #F1F3F5}
+.dropdown-item:last-child{border-bottom:none}
+.dropdown-item:hover{background:#F8F9FA}
+
+/* Table */
+.table-wrap{border:1px solid #E9ECEF;border-radius:8px;overflow:hidden;margin-bottom:12px}
+.table-scroll{overflow-x:auto}
+.data-table{min-width:580px}
+.data-table th{padding:10px 12px;text-align:left;font-size:11px;font-weight:700;color:#fff;background:#1B3A6B;white-space:nowrap}
+.data-table td{padding:10px 12px;font-size:12px;color:#343A40}
+.data-table tr:nth-child(even) td{background:#F8F9FA}
+.data-table tr:hover td{background:#EBF0FA;cursor:pointer}
+.sort-icon{color:#CED4DA;font-size:10px;margin-left:3px}
+.tbl-link{color:#2B5298;font-weight:500;cursor:pointer}
+.tbl-num-bold{font-weight:700;color:#2B5298}
+.tbl-green{color:#2E7D32;font-weight:700}
+.tbl-gray{color:#ADB5BD}
+
+/* Pagination */
+.pagination{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.page-size-row{display:flex;align-items:center;gap:8px}
+.page-size-lbl{font-size:12px;color:#6C757D}
+.page-size-sel{border:1px solid #DEE2E6;border-radius:4px;padding:3px 6px;font-size:12px;color:#495057}
+.page-btns{display:flex;gap:6px}
+.page-btn{width:28px;height:28px;border-radius:6px;border:none;background:#E9ECEF;color:#495057;font-size:12px;font-weight:700;cursor:pointer}
+.page-btn.active{background:#1B3A6B;color:#fff}
+
+/* Tree */
+.tree-wrap{border:1px solid #E9ECEF;border-radius:8px;overflow:hidden}
+.tree-node{display:flex;align-items:center;gap:6px;padding:8px 12px;border-bottom:1px solid #F1F3F5;cursor:pointer;transition:background .1s}
+.tree-node:hover{background:#F8F9FA}
+.tree-toggle{color:#1B3A6B;font-size:12px;width:14px;flex-shrink:0;user-select:none}
+.tree-code{font-size:11px;color:#1B3A6B;font-weight:600;flex-shrink:0}
+.tree-name{font-size:11px;color:#495057;flex:1}
+.tree-count{background:#E9ECEF;color:#495057;border-radius:10px;padding:1px 8px;font-size:11px;font-weight:700;flex-shrink:0}
+
+/* Detail split */
+.detail-split{display:flex;height:100%;overflow:hidden}
+.detail-split-left{flex:1;overflow:auto;padding:20px;border-right:1px solid #E9ECEF}
+.detail-split-right{width:300px;padding:16px;overflow:auto;flex-shrink:0;background:#F8F9FA}
+
+/* Obligation updates */
+.upd-item{padding:12px 16px;border-bottom:1px solid #F1F3F5;transition:background .1s}
+.upd-item:hover{background:#F8F9FA}
+.upd-item:last-child{border-bottom:none}
+.upd-badges{display:flex;align-items:center;gap:8px;margin-bottom:5px;flex-wrap:wrap}
+.upd-code{font-size:12px;font-weight:700;color:#1B3A6B}
+.upd-desc{font-size:12px;color:#495057;line-height:1.5;padding-left:22px}
+
+/* Breadcrumb */
+.breadcrumb{display:flex;align-items:center;gap:6px;font-size:12px;margin-bottom:10px;flex-wrap:wrap}
+.breadcrumb-link{color:#2B5298;font-weight:600;cursor:pointer}
+.breadcrumb-sep{color:#CED4DA}
+.breadcrumb-cur{color:#343A40;font-weight:600}
+
+/* Activity */
+.activity-wrap{padding:32px;max-width:900px;margin:0 auto}
+.activity-list{background:#fff;border-radius:8px;border:1px solid #E9ECEF;overflow:hidden}
+.activity-item{display:flex;align-items:flex-start;gap:12px;padding:14px 20px;border-bottom:1px solid #F1F3F5;transition:background .1s}
+.activity-item:hover{background:#F8F9FA}
+.activity-item:last-child{border-bottom:none}
+.activity-avatar{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700;flex-shrink:0}
+.activity-text{font-size:13px;color:#343A40;line-height:1.5}
+.activity-target{color:#2B5298;font-weight:600}
+.activity-time{font-size:11px;color:#ADB5BD;margin-top:2px}
+
+/* Empty state */
+.empty-state{padding:32px;text-align:center;color:#ADB5BD;font-size:13px}
+.empty-icon{font-size:24px;margin-bottom:8px}
+
+/* Regulation detail in panel */
+.reg-item{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #F1F3F5;margin-bottom:10px}
+.reg-link{font-size:13px;color:#2B5298;font-weight:600;cursor:pointer}
+.reg-view{font-size:12px;color:#2B5298;cursor:pointer}
+.reg-art-btns{display:flex;gap:8px;margin-bottom:12px}
+.reg-pasal-title{font-size:13px;font-weight:700;color:#343A40;margin-bottom:6px}
+.reg-pasal-body{font-size:12px;color:#495057;line-height:1.6}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="logo">
+    <div class="logo-box">NK</div>
+    <div class="logo-text">
+      <div>NINDYA</div>
+      <div>REGULATORY COMPLIANCE</div>
+    </div>
+  </div>
+  <div class="nav-links">
+    <button class="nav-btn active" onclick="showPage('home',this)">Home</button>
+    <button class="nav-btn" onclick="showPage('compliance',this)">Compliance</button>
+    <button class="nav-btn" onclick="showPage('regulatory',this)">Regulatory Framework</button>
+    <button class="nav-btn" onclick="showPage('activity',this)">Activity</button>
+  </div>
+  <div class="nav-right">
+    <input class="nav-search" placeholder="Cari peraturan..."/>
+    <div class="avatar">HL</div>
+  </div>
+</nav>
+
+<!-- ═══════════════════════ HOME PAGE ═══════════════════════ -->
+<div id="page-home" class="page active">
+<div class="home-wrap">
+  <h1 class="page-title">Home Dashboard</h1>
+  <p class="page-sub">Pantau kepatuhan peraturan PT Nindya Karya secara real-time</p>
+
+  <div class="tab-bar">
+    <div class="tab-group">
+      <button class="tab-btn active" onclick="switchHomeTab('monitor',this)">Compliance Monitor</button>
+      <button class="tab-btn" onclick="switchHomeTab('framework',this)">Regulatory Framework</button>
+    </div>
+    <div class="tab-actions">
+      <button class="btn-outline">⚙ Filter</button>
+      <button class="btn-primary">↓ Unduh Laporan</button>
+    </div>
+  </div>
+
+  <!-- COMPLIANCE MONITOR TAB -->
+  <div id="home-monitor">
+    <div class="toggle-wrap">
+      <span class="toggle-label">Regulation Based View</span>
+      <div class="toggle" id="viewToggle" onclick="toggleView()" style="background:#DEE2E6">
+        <div class="toggle-knob" id="toggleKnob" style="left:2px"></div>
+      </div>
+    </div>
+    <div class="cards-grid" id="monitorCards"></div>
+  </div>
+
+  <!-- FRAMEWORK TAB -->
+  <div id="home-framework" style="display:none">
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <span style="font-size:18px">📚</span>
+            <span class="card-title" style="margin-left:6px">Regulatory Framework Information</span>
+            <div class="card-sub">Menampilkan semua data perusahaan</div>
+          </div>
+        </div>
+        <div class="rf-grid">
+          <div><div class="rf-stat-label">TOTAL SEKTOR</div><div class="rf-stat-val">4</div></div>
+          <div><div class="rf-stat-label">TOTAL KEWAJIBAN</div><div class="rf-stat-val">4.294</div></div>
+          <div><div class="rf-stat-label">HIERARKI PERATURAN</div><div class="rf-stat-val">27</div></div>
+          <div><div class="rf-stat-label">TOTAL PERATURAN</div><div class="rf-stat-val">353</div></div>
+        </div>
+        <div class="rf-info-bar">
+          <span class="rf-info-txt">Perusahaan memiliki <strong>4.294 kewajiban</strong> dari <strong>353 peraturan</strong> dalam 4 sektor</span>
+          <button class="btn-navy-sm" onclick="showPage('regulatory',document.querySelectorAll('.nav-btn')[2])">Lihat Regulatory Framework</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <span style="font-size:16px">📊</span>
+            <span class="card-title" style="margin-left:6px">Regulatory Framework Chart</span>
+            <div class="card-sub">Dikategorikan berdasarkan jenis kewajiban</div>
+          </div>
+        </div>
+        <div class="pie-row">
+          <svg width="150" height="150" viewBox="0 0 150 150" id="pieSvg"></svg>
+          <div class="pie-legend" id="pieLegend"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════ COMPLIANCE PAGE ═══════════════════════ -->
+<div id="page-compliance" class="page">
+<div class="with-sidebar">
+  <div class="sidebar">
+    <div class="sidebar-title">Compliance</div>
+    <div class="sidebar-item active">
+      <span class="sidebar-icon">📋</span>
+      <span class="sidebar-lbl">Compliance Monitor</span>
+    </div>
+    <div class="sidebar-item">
+      <span class="sidebar-icon">📎</span>
+      <span class="sidebar-lbl">Compliance Attachment</span>
+    </div>
+  </div>
+  <div class="content-area" style="padding:16px;background:#F8F9FA">
+    <div class="breadcrumb">
+      <span style="color:#ADB5BD">Compliance</span>
+      <span class="breadcrumb-sep">›</span>
+      <span class="breadcrumb-cur">Compliance Monitor</span>
+    </div>
+    <div class="comp-toolbar">
+      <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input class="search-input" id="compSearch" placeholder="Cari kewajiban..." oninput="filterCompliance()"/>
+      </div>
+      <button class="btn-outline">⚙ Filter</button>
+      <div class="dropdown">
+        <button class="btn-primary" onclick="toggleDD('sortDD')">Bulk Action ▾</button>
+        <div class="dropdown-menu" id="sortDD">
+          <div class="dropdown-item">Last Modified (Newest)</div>
+          <div class="dropdown-item">Last Modified (Oldest)</div>
+          <div class="dropdown-item">Due Date (Newest)</div>
+          <div class="dropdown-item">Due Date (Oldest)</div>
+        </div>
+      </div>
+    </div>
+    <div class="warn-bar">
+      <span>⚠ Compliance dengan status Unassigned tidak mempengaruhi compliance rate di dashboard.</span>
+      <span style="cursor:pointer;color:#ADB5BD" onclick="this.parentElement.style.display='none'">✕</span>
+    </div>
+    <div class="comp-count" id="compCount"></div>
+    <div class="comp-list" id="compList"></div>
+  </div>
+  <div class="detail-panel" id="detailPanel" style="display:none">
+    <div class="detail-scroll">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px">
+        <div id="detailBadges" style="display:flex;gap:6px;flex-wrap:wrap"></div>
+        <button onclick="document.getElementById('detailPanel').style.display='none'" style="background:none;border:none;cursor:pointer;color:#ADB5BD;font-size:16px;margin-left:8px;flex-shrink:0">✕</button>
+      </div>
+      <div class="detail-title" id="detailTitle"></div>
+      <div class="action-btns">
+        <button class="btn-sm">↗ Buka Detail</button>
+        <button class="btn-sm">✏ Edit Alias</button>
+      </div>
+      <div class="enforced-row">
+        <div class="enforced-left">
+          <div class="enforced-icon">✓</div>
+          <div><div class="enforced-name">Enforced</div><div class="enforced-date">02 Agu 2024</div></div>
+        </div>
+        <div class="btn-row">
+          <button class="btn-sm">Inaktifkan</button>
+          <button class="btn-sm">•••</button>
+        </div>
+      </div>
+      <div class="detail-sub-tabs">
+        <button class="detail-tab active" onclick="switchDetailTab('Information',this)">Information</button>
+        <button class="detail-tab" onclick="switchDetailTab('Checklist',this)">Checklist and File</button>
+        <button class="detail-tab" onclick="switchDetailTab('Regulation',this)">Regulation</button>
+        <button class="detail-tab" onclick="switchDetailTab('Collaboration',this)">Collaboration</button>
+        <button class="detail-tab" onclick="switchDetailTab('Activity',this)">Activity</button>
+      </div>
+      <div style="padding-top:16px" id="detailTabContent"></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════ REGULATORY FRAMEWORK PAGE ═══════════════════════ -->
+<div id="page-regulatory" class="page">
+<div class="with-sidebar">
+  <div class="sidebar">
+    <div class="sidebar-title">Regulatory Framework</div>
+    <div class="sidebar-item active" onclick="switchRFSection('sector',this)">
+      <span class="sidebar-icon">🗂</span>
+      <span class="sidebar-lbl">Sector Based</span>
+    </div>
+    <div class="sidebar-item" onclick="switchRFSection('regulation',this)">
+      <span class="sidebar-icon">🏛</span>
+      <span class="sidebar-lbl">Regulation Based</span>
+    </div>
+    <div class="sidebar-item" onclick="switchRFSection('updates',this)">
+      <span class="sidebar-icon">🔄</span>
+      <span class="sidebar-lbl">Obligation Updates</span>
+    </div>
+  </div>
+  <div class="content-area" style="background:#fff">
+    <!-- SECTOR BASED -->
+    <div id="rf-sector" class="rf-content">
+      <div class="rf-toolbar">
+        <h2>Sector Based</h2>
+        <div class="dropdown">
+          <button class="btn-primary" onclick="toggleDD('sectorBulkDD')">Bulk Action ▾</button>
+          <div class="dropdown-menu" id="sectorBulkDD">
+            <div class="dropdown-item">Aktifkan</div>
+            <div class="dropdown-item">Inaktifkan</div>
+            <div class="dropdown-item">Konfirmasi Pembaruan</div>
+          </div>
+        </div>
+      </div>
+      <div class="search-wrap" style="margin-bottom:12px">
+        <span class="search-icon">🔍</span>
+        <input class="search-input" id="sectorSearch" placeholder="Cari Kode atau Nama Sektor..." oninput="filterSectors()"/>
+      </div>
+      <div class="comp-count" id="sectorCount"></div>
+      <div class="table-wrap">
+        <div class="table-scroll">
+          <table class="data-table" id="sectorTable">
+            <thead><tr>
+              <th>No</th>
+              <th>Kode <span class="sort-icon">⇅</span></th>
+              <th>Nama Sektor <span class="sort-icon">⇅</span></th>
+              <th>Topik <span class="sort-icon">⇅</span></th>
+              <th>Sub-topik <span class="sort-icon">⇅</span></th>
+              <th>Kewajiban <span class="sort-icon">⇅</span></th>
+              <th>Kewajiban Aktif</th>
+              <th>Pembaruan Terakhir</th>
+            </tr></thead>
+            <tbody id="sectorTbody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="pagination">
+        <div class="page-size-row"><span class="page-size-lbl">Baris per halaman:</span><select class="page-size-sel"><option>10</option><option>20</option><option>50</option></select></div>
+        <div class="page-btns"><button class="page-btn active">1</button></div>
+      </div>
+    </div>
+
+    <!-- SECTOR DETAIL -->
+    <div id="rf-sector-detail" style="display:none;height:100%;overflow:hidden">
+      <div class="detail-split">
+        <div class="detail-split-left">
+          <div id="sectorDetailBreadcrumb" class="breadcrumb" style="margin-bottom:12px"></div>
+          <input id="sectorDetailName" readonly style="width:100%;border:1px solid #DEE2E6;border-radius:6px;padding:7px 10px;font-size:12px;color:#495057;background:#F8F9FA;margin-bottom:6px"/>
+          <div class="search-wrap" style="margin-bottom:8px">
+            <span class="search-icon">🔍</span>
+            <input class="search-input" placeholder="Cari Topik atau Sub-topik..."/>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+            <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:#6C757D;cursor:pointer">
+              <input type="checkbox" style="accent-color:#1B3A6B"/> Pilih semua untuk diaktifkan
+            </label>
+            <button onclick="collapseAll()" style="background:none;border:none;cursor:pointer;font-size:12px;color:#2B5298;font-weight:600">Tutup Semua</button>
+          </div>
+          <div class="tree-wrap" id="sectorTree"></div>
+        </div>
+        <div class="detail-split-right">
+          <div class="search-wrap" style="margin-bottom:8px">
+            <span class="search-icon">🔍</span>
+            <input class="search-input" style="font-size:11px" placeholder="Cari Kewajiban..."/>
+          </div>
+          <div style="font-size:11px;color:#6C757D;margin-bottom:6px">Baris per halaman:
+            <select style="border:1px solid #DEE2E6;border-radius:4px;padding:1px 4px;font-size:11px;color:#495057;margin-left:6px"><option>10</option><option>20</option></select>
+          </div>
+          <div class="comp-list" id="sectorObligations"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REGULATION BASED -->
+    <div id="rf-regulation" class="rf-content" style="display:none">
+      <h2>Peraturan Yang Diacu</h2>
+      <p>Daftar hierarki peraturan yang menjadi dasar hukum kewajiban perusahaan</p>
+      <div class="search-wrap" style="margin-bottom:12px">
+        <span class="search-icon">🔍</span>
+        <input class="search-input" id="regSearch" placeholder="Cari hierarki peraturan..." oninput="filterRegulations()"/>
+      </div>
+      <div class="comp-count" id="regCount"></div>
+      <div class="table-wrap">
+        <div class="table-scroll">
+          <table class="data-table" id="regTable">
+            <thead><tr>
+              <th>No</th>
+              <th>Hierarki Peraturan <span class="sort-icon">⇅</span></th>
+              <th>Peraturan <span class="sort-icon">⇅</span></th>
+              <th>Kewajiban <span class="sort-icon">⇅</span></th>
+              <th>Kewajiban Aktif</th>
+              <th>Pembaruan Terakhir</th>
+            </tr></thead>
+            <tbody id="regTbody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="pagination">
+        <div class="page-size-row"><span class="page-size-lbl">Baris per halaman:</span><select class="page-size-sel"><option>5</option><option>10</option><option>20</option></select></div>
+        <div class="page-btns" id="regPagination"></div>
+      </div>
+    </div>
+
+    <!-- OBLIGATION UPDATES -->
+    <div id="rf-updates" class="rf-content" style="display:none">
+      <div class="rf-toolbar">
+        <div>
+          <h2>Pembaruan Kewajiban</h2>
+          <p>Kewajiban yang baru ditambahkan atau diperbarui dalam database peraturan</p>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn-outline">📅 Pilih Tanggal</button>
+          <button class="btn-outline">↓</button>
+        </div>
+      </div>
+      <div class="comp-toolbar">
+        <div class="search-wrap">
+          <span class="search-icon">🔍</span>
+          <input class="search-input" id="updSearch" placeholder="Cari kewajiban..." oninput="filterUpdates()"/>
+        </div>
+        <button class="btn-outline">⚙ Filter</button>
+        <button class="btn-primary">Bulk Action ▾</button>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px">
+        <input type="checkbox" style="accent-color:#1B3A6B"/>
+        <span style="font-size:12px;color:#6C757D">Pilih semua untuk konfirmasi pembaruan ▾</span>
+        <span id="updCount" style="margin-left:8px;font-size:11px;color:#ADB5BD"></span>
+      </div>
+      <div class="table-wrap" id="updList"></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════ ACTIVITY PAGE ═══════════════════════ -->
+<div id="page-activity" class="page">
+<div class="activity-wrap">
+  <h1 class="page-title">Activity</h1>
+  <p class="page-sub" style="margin-bottom:24px">Riwayat aktivitas pengelolaan peraturan dan kewajiban compliance</p>
+  <div class="activity-list" id="activityList"></div>
+</div>
+</div>
+
+<script>
+// ═══════════════════ DATA ═══════════════════
+const REGULATIONS = [
+  {no:1,hierarchy:"Undang-Undang",regulation:39,obligation:1610,active:22,lastUpdate:"02 Agu 2024"},
+  {no:2,hierarchy:"Peraturan Pemerintah Pengganti Undang-Undang (PERPU)",regulation:1,obligation:0,active:0,lastUpdate:"23 Jul 2024"},
+  {no:3,hierarchy:"Peraturan Pemerintah",regulation:45,obligation:827,active:25,lastUpdate:"02 Agu 2024"},
+  {no:4,hierarchy:"Peraturan Presiden",regulation:10,obligation:230,active:0,lastUpdate:"23 Jul 2024"},
+  {no:5,hierarchy:"Keputusan Bersama",regulation:1,obligation:1,active:0,lastUpdate:"23 Jul 2024"},
+  {no:6,hierarchy:"Peraturan Menteri",regulation:86,obligation:1175,active:18,lastUpdate:"02 Agu 2024"},
+  {no:7,hierarchy:"Surat Edaran Menteri",regulation:9,obligation:49,active:0,lastUpdate:"23 Jul 2024"},
+  {no:8,hierarchy:"Keputusan Menteri",regulation:15,obligation:230,active:0,lastUpdate:"23 Jul 2024"},
+  {no:9,hierarchy:"Instruksi Menteri",regulation:1,obligation:2,active:0,lastUpdate:"23 Jul 2024"},
+  {no:10,hierarchy:"Peraturan Lembaga/Badan",regulation:58,obligation:547,active:0,lastUpdate:"23 Jul 2024"},
+  {no:11,hierarchy:"Keputusan Lembaga/Badan",regulation:27,obligation:189,active:0,lastUpdate:"23 Jul 2024"},
+  {no:12,hierarchy:"Surat Edaran Lembaga/Badan",regulation:12,obligation:64,active:0,lastUpdate:"23 Jul 2024"},
+];
+
+const SECTORS = [
+  {code:"GC",name:"General Corporate",topic:1,subtopic:162,obligation:1167,active:0,lastUpdate:"23 Jul 2024"},
+  {code:"ET",name:"Employment",topic:3,subtopic:353,obligation:2206,active:28,lastUpdate:"23 Jul 2024"},
+  {code:"ITE",name:"Informasi dan Transaksi Elektronik",topic:1,subtopic:85,obligation:538,active:0,lastUpdate:"23 Jul 2024"},
+  {code:"PDP",name:"Pelindungan Data Pribadi",topic:1,subtopic:99,obligation:383,active:0,lastUpdate:"23 Jul 2024"},
+];
+
+const SECTOR_TREES = {
+  PDP:[{code:"PDP.1",name:"Pelindungan Data Pribadi",children:[
+    {code:"PDP.1.AB",name:"Pelindungan Data Pribadi bagi Lembaga Jasa Keuangan (LJK)",children:[
+      {code:"PDP.1.AB.1",name:"Pelaporan dan Permintaan Informasi Debitur Melalui SLIK",count:5},
+    ]},
+    {code:"PDP.1.L",name:"Pelindungan Data Pribadi dalam Bidang Administrasi Kependudukan",count:9},
+    {code:"PDP.1.X",name:"Pelindungan Data Pribadi dalam Sektor BUMN",count:1},
+    {code:"PDP.1.M",name:"Pelindungan Data Pribadi dalam Bidang APU PPT dan Anti KKN",children:[
+      {code:"PDP.1.M.1",name:"Penerapan Program Anti Pencucian Uang",count:3},
+    ]},
+  ]}],
+  GC:[{code:"GC.1",name:"Tata Kelola Perusahaan",children:[
+    {code:"GC.1.A",name:"Organ Perusahaan",count:12},
+    {code:"GC.1.B",name:"Dokumen Perusahaan",count:8},
+  ]},{code:"GC.2",name:"Rapat Umum Pemegang Saham",children:[
+    {code:"GC.2.A",name:"RUPS Tahunan",count:6},
+    {code:"GC.2.B",name:"RUPS Luar Biasa",count:4},
+  ]}],
+  ET:[{code:"ET.1",name:"Ketenagakerjaan Umum",children:[
+    {code:"ET.1.A",name:"Perjanjian Kerja",count:15},
+    {code:"ET.1.B",name:"Upah dan Tunjangan",count:22},
+  ]},{code:"ET.3",name:"Imigrasi dan Tenaga Kerja Asing",children:[
+    {code:"ET.3.A",name:"Pengawasan Keimigrasian",count:18},
+  ]}],
+  ITE:[{code:"ITE.1",name:"Transaksi Elektronik",children:[
+    {code:"ITE.1.A",name:"Tanda Tangan Elektronik",count:7},
+    {code:"ITE.1.B",name:"Sertifikat Elektronik",count:5},
+  ]}],
+};
+
+const COMPLIANCE = [
+  {code:"PDP.1.X.1",priority:"Medium",status:"Unassigned",description:"Melindungi dan memastikan keamanan data pribadi yang dikelola BUMN sesuai dengan ketentuan peraturan perundang-undangan yang mengatur mengenai pelindungan data pribadi",pic:"Legal Division",dasar:"UU No. 27 Tahun 2022",topik:"Pelindungan Data Pribadi",subtopik:"Pelindungan Data Pribadi dalam Sektor BUMN"},
+  {code:"ET.3.A.20",priority:"High",status:"Comply",description:"Mengikuti pemeriksaan yang dilakukan oleh Pejabat Imigrasi di Tempat Pemeriksaan Imigrasi bagi Anak Berkewarganegaraan Ganda yang memiliki Paspor Kebangsaan serta fasilitas Keimigrasian yang masuk atau keluar Wilayah Indonesia",pic:"HR & GA Division",dasar:"UU No. 6 Tahun 2011",topik:"Keimigrasian",subtopik:"Pemeriksaan Keimigrasian"},
+  {code:"ET.3.A.7",priority:"High",status:"In Progress",description:"Memastikan pemenuhan persyaratan yang ditetapkan dalam peraturan perundang-undangan untuk Awak Alat Angkut transportasi lainnya yang masuk atau keluar Wilayah Indonesia dengan Alat Angkutnya",pic:"HR & GA Division",dasar:"UU No. 6 Tahun 2011",topik:"Keimigrasian",subtopik:"Pengawasan Keimigrasian"},
+  {code:"ET.3.A.5",priority:"High",status:"In Progress",description:"Memastikan pemenuhan persyaratan yang ditetapkan dalam peraturan perundang-undangan untuk Awak Alat Angkut laut yang masuk atau keluar Wilayah Indonesia dengan Alat Angkutnya",pic:"HR & GA Division",dasar:"UU No. 6 Tahun 2011",topik:"Keimigrasian",subtopik:"Pengawasan Keimigrasian"},
+  {code:"ET.3.A.17",priority:"High",status:"In Progress",description:"Mengajukan permohonan Surat Perjalanan Laksana Paspor untuk Orang Asing yang tidak mempunyai Dokumen Perjalanan yang sah dan negaranya tidak mempunyai perwakilan di Indonesia",pic:"Legal Division",dasar:"UU No. 6 Tahun 2011",topik:"Keimigrasian",subtopik:"Dokumen Perjalanan"},
+  {code:"GC.1.A.3",priority:"Low",status:"Comply",description:"Memastikan seluruh dokumen perusahaan tersimpan dengan baik dan dapat diakses sesuai ketentuan tata kelola dokumen yang berlaku di PT Nindya Karya",pic:"Corporate Secretary",dasar:"UU No. 40 Tahun 2007",topik:"Tata Kelola Perusahaan",subtopik:"Dokumen Perusahaan"},
+  {code:"GC.2.B.1",priority:"Medium",status:"In Progress",description:"Melaksanakan RUPS Tahunan sesuai ketentuan Undang-Undang Perseroan Terbatas dan Anggaran Dasar Perusahaan dalam jangka waktu yang telah ditetapkan",pic:"Corporate Secretary",dasar:"UU No. 40 Tahun 2007",topik:"Tata Kelola Perusahaan",subtopik:"RUPS"},
+  {code:"ITE.1.A.2",priority:"Medium",status:"Unassigned",description:"Memastikan penggunaan tanda tangan elektronik dalam setiap transaksi elektronik perusahaan telah memenuhi persyaratan yang ditetapkan dalam peraturan perundang-undangan",pic:"ICT Division",dasar:"UU No. 11 Tahun 2008",topik:"Transaksi Elektronik",subtopik:"Tanda Tangan Elektronik"},
+  {code:"ET.1.B.4",priority:"Low",status:"Comply",description:"Memastikan pembayaran upah minimum kepada seluruh karyawan sesuai dengan Upah Minimum Provinsi/Kabupaten/Kota yang berlaku",pic:"HR & GA Division",dasar:"UU No. 13 Tahun 2003",topik:"Ketenagakerjaan",subtopik:"Upah dan Kesejahteraan"},
+  {code:"GC.1.B.2",priority:"Medium",status:"In Progress",description:"Menyusun dan memelihara daftar pemegang saham serta buku daftar pemegang obligasi sesuai ketentuan yang berlaku",pic:"Corporate Secretary",dasar:"UU No. 40 Tahun 2007",topik:"Tata Kelola Perusahaan",subtopik:"Saham"},
+];
+
+const UPDATES = [
+  {code:"PDP.1.X.1",tags:["New","Active"],description:"Melindungi dan memastikan keamanan data pribadi yang dikelola BUMN sesuai dengan ketentuan peraturan perundang-undangan yang mengatur mengenai pelindungan data pribadi"},
+  {code:"ET.3.A.15",tags:["New","Version 4"],description:"Memenuhi kewajiban yang telah ditetapkan dalam peraturan perundang-undangan bagi Penanggung Jawab Alat Angkut yang datang dari luar Wilayah Indonesia atau akan berangkat keluar Wilayah Indonesia"},
+  {code:"ET.3.A.18",tags:["New","Active","Version 3"],description:"Mengikuti pemeriksaan yang dilakukan oleh Pejabat Imigrasi di Tempat Pemeriksaan Imigrasi bagi Orang Asing yang keluar Wilayah Indonesia"},
+  {code:"ET.3.A.4",tags:["New","Active","Version 3"],description:"Mendapat Tanda Keluar dari Pejabat Imigrasi untuk setiap orang dapat keluar Wilayah Indonesia setelah memenuhi persyaratan"},
+  {code:"ET.3.A.3",tags:["New","Active","Version 3"],description:"Mendapatkan tanda masuk bagi Orang Asing yang telah memenuhi persyaratan dapat masuk wilayah Indonesia"},
+  {code:"ET.3.A.11",tags:["New","Active","Version 4"],description:"Mengikuti pemeriksaan yang dilakukan oleh Pejabat Imigrasi di Tempat Pemeriksaan Imigrasi bagi Orang Asing yang masuk Wilayah Indonesia"},
+  {code:"ET.3.A.2",tags:["New","Active","Version 4"],description:"Memastikan setiap Orang Asing yang masuk Wilayah Indonesia memiliki dokumen perjalanan yang sah dan tidak kedaluwarsa"},
+  {code:"GC.1.A.5",tags:["New","Version 2"],description:"Memastikan Direksi dan Dewan Komisaris memenuhi persyaratan integritas dan kompetensi sesuai ketentuan yang berlaku"},
+];
+
+const ACTIVITIES = [
+  {user:"HL",name:"Hendra Laksono",action:"menambahkan peraturan baru",target:"Permen PUPR No. 1/2026",time:"2 jam lalu",color:"#1B3A6B"},
+  {user:"CS",name:"Corporate Secretary",action:"mengubah status kewajiban",target:"ET.3.A.20 → Comply",time:"4 jam lalu",color:"#5B2D8E"},
+  {user:"HL",name:"Hendra Laksono",action:"mengunggah dokumen checklist untuk",target:"PDP.1.X.1",time:"kemarin 15:42",color:"#1B3A6B"},
+  {user:"IT",name:"ICT Division",action:"mengaktifkan kewajiban",target:"GC.2.B.1",time:"2 hari lalu",color:"#00695C"},
+  {user:"GA",name:"HR & GA Division",action:"menambahkan komentar pada",target:"ET.3.A.7",time:"3 hari lalu",color:"#2E7D32"},
+  {user:"LD",name:"Legal Division",action:"memperbarui dasar hukum",target:"ITE.1.A.2",time:"4 hari lalu",color:"#E05B18"},
+  {user:"CS",name:"Corporate Secretary",action:"mengajukan permohonan review untuk",target:"GC.1.B.2",time:"5 hari lalu",color:"#5B2D8E"},
+];
+
+const PIE_DATA = [
+  {name:"Prohibition",value:485,color:"#F57F17"},
+  {name:"Continuous",value:2563,color:"#5B2D8E"},
+  {name:"Conditional",value:1262,color:"#1B3A6B"},
+  {name:"Licensing",value:832,color:"#1565C0"},
+  {name:"Periodic",value:145,color:"#E05B18"},
+];
+
+// ═══════════════════ STATE ═══════════════════
+let isRegView = false;
+let selectedCompliance = null;
+let currentDetailTab = 'Information';
+let currentRFSection = 'sector';
+let expandedNodes = {};
+let regPage = 1;
+const REG_ROWS = 5;
+
+// ═══════════════════ NAVIGATION ═══════════════════
+function showPage(name, btn) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  if(btn) btn.classList.add('active');
+  closeAllDD();
+}
+
+function switchHomeTab(tab, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('home-monitor').style.display = tab==='monitor'?'':'none';
+  document.getElementById('home-framework').style.display = tab==='framework'?'':'none';
+}
+
+// ═══════════════════ DROPDOWNS ═══════════════════
+function toggleDD(id) {
+  const el = document.getElementById(id);
+  const wasOpen = el.classList.contains('open');
+  closeAllDD();
+  if(!wasOpen) el.classList.add('open');
+}
+function closeAllDD() {
+  document.querySelectorAll('.dropdown-menu').forEach(d=>d.classList.remove('open'));
+}
+document.addEventListener('click', e=>{
+  if(!e.target.closest('.dropdown')) closeAllDD();
+});
+
+// ═══════════════════ HOME - TOGGLE VIEW ═══════════════════
+function toggleView() {
+  isRegView = !isRegView;
+  const toggle = document.getElementById('viewToggle');
+  const knob = document.getElementById('toggleKnob');
+  toggle.style.background = isRegView ? '#1B3A6B' : '#DEE2E6';
+  knob.style.left = isRegView ? '20px' : '2px';
+  renderMonitorCards();
+}
+
+function renderMonitorCards() {
+  const rate = isRegView ? 53 : 70;
+  const comply = isRegView ? 28 : 26;
+  const total = isRegView ? 53 : 37;
+  const inProg = isRegView ? 25 : 11;
+  const groupLabel = isRegView ? 'Regulation' : 'User Group';
+
+  const groupComply = isRegView
+    ? [{g:"UU No. 28/1999",v:1},{g:"UU No. 31/1999",v:1},{g:"Permen No. 2/2004",v:1},{g:"UU No. 40/2007",v:1},{g:"UU No. 11/2008",v:5}]
+    : [{g:"Compliance Division",v:3},{g:"Corporate Secretary",v:3},{g:"HR & GA Division",v:4},{g:"ICT Division",v:5},{g:"Legal Division",v:10},{g:"Operation",v:1}];
+  const groupProg = isRegView
+    ? [{g:"UU No. 28/1999",v:0},{g:"UU No. 31/1999",v:0},{g:"Permen No. 2/2004",v:0},{g:"UU No. 40/2007",v:4},{g:"UU No. 11/2008",v:1}]
+    : [{g:"Compliance Division",v:5},{g:"Corporate Secretary",v:0},{g:"HR & GA Division",v:0},{g:"ICT Division",v:0},{g:"Legal Division",v:6},{g:"Operation",v:0}];
+
+  const bars = isRegView ? '' : `
+    <div class="bar-section">
+      <div class="bar-label-row">Compliance Rate by Priority</div>
+      ${[{n:"High",v:4,c:"#C62828"},{n:"Medium",v:18,c:"#F57F17"},{n:"Low",v:4,c:"#1565C0"}].map(b=>`
+        <div class="bar-row">
+          <span class="bar-name">${b.n}</span>
+          <div class="bar-track"><div class="bar-fill" style="width:${(b.v/20)*100}%;background:${b.c}"></div></div>
+          <span class="bar-val">${b.v}</span>
+        </div>`).join('')}
+    </div>`;
+
+  const regLegend = isRegView ? `
+    <div class="bar-section">
+      <div class="bar-label-row">Total Regulation Comply</div>
+      <div style="display:flex;align-items:center;gap:6px;margin-top:4px">
+        <div style="width:12px;height:12px;background:#F57F17;border-radius:2px"></div>
+        <span style="font-size:11px;color:#495057">Comply: ${comply} dari ${total}</span>
+      </div>
+    </div>` : '';
+
+  const groupRows = (items) => items.map(({g,v})=>`
+    <div class="group-row">
+      <span class="group-name">${g}</span>
+      <span class="group-val">${v}</span>
+    </div>`).join('');
+
+  document.getElementById('monitorCards').innerHTML = `
+    <div class="card">
+      <div class="card-header">
+        <div><span class="card-title">% Compliance Rate</span><div class="card-sub">${comply} dari ${total} ${isRegView?'Comply Regulations':'Comply Obligations'}</div></div>
+        <span class="card-menu">⋮</span>
+      </div>
+      <div class="donut-row">
+        ${donutSVG(rate,'#F57F17',90)}
+        ${bars}${regLegend}
+      </div>
+      <div class="info-bar">
+        <span class="info-bar-txt">Perusahaan telah mematuhi <strong>${comply}</strong> dari <strong>${total}</strong> kewajiban yang sedang berjalan</span>
+        <button class="btn-orange">Comply Sekarang</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon-row">
+          <div class="icon-circle-green">✓</div>
+          <span class="card-title">Obligation Comply by ${isRegView?'Regulation':'Group'}</span>
+        </div>
+        <span class="card-menu">⋮</span>
+      </div>
+      <div class="big-num">${comply}<span class="pct-green">70%</span></div>
+      <div class="group-header"><span class="group-col">${groupLabel}</span><span class="group-col">Obligation</span></div>
+      ${groupRows(groupComply)}
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon-row">
+          <div class="icon-circle-gray">○</div>
+          <span class="card-title">In Progress by ${isRegView?'Regulation':'Group'}</span>
+        </div>
+        <span class="card-menu">⋮</span>
+      </div>
+      <div class="big-num">${inProg}<span class="pct-red">30%</span></div>
+      <div class="group-header"><span class="group-col">${groupLabel}</span><span class="group-col">Obligation</span></div>
+      ${groupRows(groupProg)}
+    </div>`;
+}
+
+function donutSVG(rate, color, size) {
+  const r=36, circ=2*Math.PI*r, fill=circ*rate/100, empty=circ*(1-rate/100);
+  return `<div class="donut-svg-wrap" style="width:${size}px;height:${size}px;flex-shrink:0">
+    <svg viewBox="0 0 90 90" width="${size}" height="${size}" style="transform:rotate(-90deg)">
+      <circle cx="45" cy="45" r="${r}" fill="none" stroke="#E9ECEF" stroke-width="10"/>
+      <circle cx="45" cy="45" r="${r}" fill="none" stroke="${color}" stroke-width="10"
+        stroke-dasharray="${fill} ${empty}" stroke-linecap="round"/>
+    </svg>
+    <div class="donut-label"><span class="donut-pct">${rate}%</span><span class="donut-txt">Comply</span></div>
+  </div>`;
+}
+
+function renderPieChart() {
+  const total = PIE_DATA.reduce((s,d)=>s+d.value,0);
+  const cx=75,cy=75,r=60,ri=35;
+  let startAngle=-Math.PI/2;
+  let paths='', legendHTML='';
+  PIE_DATA.forEach(d=>{
+    const angle=(d.value/total)*2*Math.PI;
+    const endAngle=startAngle+angle;
+    const x1=cx+r*Math.cos(startAngle), y1=cy+r*Math.sin(startAngle);
+    const x2=cx+r*Math.cos(endAngle), y2=cy+r*Math.sin(endAngle);
+    const xi1=cx+ri*Math.cos(startAngle), yi1=cy+ri*Math.sin(startAngle);
+    const xi2=cx+ri*Math.cos(endAngle), yi2=cy+ri*Math.sin(endAngle);
+    const large=angle>Math.PI?1:0;
+    paths+=`<path d="M${xi1},${yi1} L${x1},${y1} A${r},${r} 0 ${large} 1 ${x2},${y2} L${xi2},${yi2} A${ri},${ri} 0 ${large} 0 ${xi1},${yi1}" fill="${d.color}"/>`;
+    legendHTML+=`<div class="pie-legend-item"><div class="pie-dot" style="background:${d.color}"></div><span class="pie-lbl">${d.name}: <strong>${d.value.toLocaleString('id-ID')}</strong></span></div>`;
+    startAngle=endAngle;
+  });
+  document.getElementById('pieSvg').innerHTML=paths;
+  document.getElementById('pieLegend').innerHTML=legendHTML;
+}
+
+// ═══════════════════ COMPLIANCE ═══════════════════
+function statusBadge(s) {
+  const m={Comply:'comply','In Progress':'progress',Unassigned:'unassigned'};
+  return `<span class="badge badge-${m[s]||'unassigned'}">${s}</span>`;
+}
+function priorityBadge(p) {
+  const m={High:{cls:'high',p:'P1'},Medium:{cls:'medium',p:'P2'},Low:{cls:'low',p:'P3'}};
+  const x=m[p]||m.Low;
+  return `<span class="badge badge-${x.cls}">${x.p} ${p}</span>`;
+}
+function tagBadge(t) {
+  if(t==='New') return `<span class="tag-new">${t}</span>`;
+  if(t==='Active') return `<span class="tag-active">${t}</span>`;
+  return `<span class="tag-version">${t}</span>`;
+}
+
+function renderCompliance(data) {
+  const list = document.getElementById('compList');
+  document.getElementById('compCount').textContent=`Menampilkan ${data.length} dari ${COMPLIANCE.length} data`;
+  if(!data.length){list.innerHTML='<div class="empty-state"><div class="empty-icon">🔍</div>Tidak ada kewajiban yang sesuai.</div>';return;}
+  list.innerHTML = data.map((item,i)=>`
+    <div class="comp-item${selectedCompliance&&selectedCompliance.code===item.code?' selected':''}" onclick="selectCompliance('${item.code}')">
+      <div class="comp-badges">
+        <input type="checkbox" style="accent-color:#1B3A6B" onclick="event.stopPropagation()"/>
+        <span class="comp-code">${item.code}</span>
+        ${priorityBadge(item.priority)}
+        ${statusBadge(item.status)}
+      </div>
+      <div class="comp-desc">${item.description}</div>
+    </div>`).join('');
+}
+
+function filterCompliance() {
+  const q = document.getElementById('compSearch').value.toLowerCase();
+  renderCompliance(COMPLIANCE.filter(c=>c.code.toLowerCase().includes(q)||c.description.toLowerCase().includes(q)));
+}
+
+function selectCompliance(code) {
+  selectedCompliance = COMPLIANCE.find(c=>c.code===code);
+  document.getElementById('detailPanel').style.display='flex';
+  document.getElementById('detailPanel').style.flexDirection='column';
+  renderDetailPanel();
+  filterCompliance();
+}
+
+function renderDetailPanel() {
+  if(!selectedCompliance) return;
+  const c=selectedCompliance;
+  document.getElementById('detailBadges').innerHTML=`<span class="comp-code">${c.code}</span>${priorityBadge(c.priority)}${statusBadge(c.status)}`;
+  document.getElementById('detailTitle').textContent=c.description;
+  switchDetailTab(currentDetailTab, null);
+}
+
+function switchDetailTab(tab, btn) {
+  currentDetailTab=tab;
+  document.querySelectorAll('.detail-tab').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  else document.querySelectorAll('.detail-tab').forEach(b=>{if(b.textContent.trim()===tab||b.textContent.trim().startsWith(tab))b.classList.add('active');});
+  const c=selectedCompliance;
+  const content=document.getElementById('detailTabContent');
+  if(tab==='Information') {
+    content.innerHTML=`
+      ${[{l:'Topik',v:c.topik},{l:'Sub-topik',v:c.subtopik},{l:'Prioritas',v:c.priority},{l:'PIC',v:c.pic},{l:'Status Proses',v:c.status},{l:'Dasar Hukum',v:c.dasar}]
+        .map(({l,v})=>`<div class="info-field"><div class="info-field-lbl">${l}</div><div class="info-field-val">${v}</div></div>`).join('')}`;
+  } else if(tab==='Regulation') {
+    content.innerHTML=`
+      <div class="reg-item">
+        <span class="reg-link">∧ ${c.dasar}</span>
+        <span class="reg-view">Lihat ›</span>
+      </div>
+      <div class="reg-art-btns">
+        <button class="btn-sm">Pasal Kewajiban</button>
+        <button class="btn-sm">Pasal Sanksi</button>
+      </div>
+      <div class="reg-pasal-title">Kewajiban Pasal 1</div>
+      <div class="reg-pasal-body">Dalam peraturan ini yang dimaksud dengan kewajiban adalah segala sesuatu yang harus dilakukan atau tidak dilakukan oleh subjek hukum sesuai dengan ketentuan peraturan perundang-undangan yang berlaku di wilayah Republik Indonesia.</div>`;
+  } else {
+    content.innerHTML='<div class="empty-state"><div class="empty-icon">📋</div>Tidak ada data untuk ditampilkan.</div>';
+  }
+}
+
+// ═══════════════════ REGULATORY FRAMEWORK ═══════════════════
+function switchRFSection(section, btn) {
+  currentRFSection=section;
+  document.querySelectorAll('.sidebar-item').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  ['rf-sector','rf-sector-detail','rf-regulation','rf-updates'].forEach(id=>{
+    document.getElementById(id).style.display='none';
+  });
+  if(section==='sector') document.getElementById('rf-sector').style.display='';
+  if(section==='regulation') document.getElementById('rf-regulation').style.display='';
+  if(section==='updates') document.getElementById('rf-updates').style.display='';
+}
+
+// SECTORS TABLE
+function renderSectors(data) {
+  document.getElementById('sectorCount').textContent=`${data.length} dari ${SECTORS.length} data ditampilkan`;
+  document.getElementById('sectorTbody').innerHTML=data.map((r,i)=>`
+    <tr onclick="openSectorDetail('${r.code}')">
+      <td>${i+1}</td>
+      <td class="tbl-num-bold">${r.code}</td>
+      <td>${r.name}</td>
+      <td>${r.topic}</td>
+      <td>${r.subtopic}</td>
+      <td class="tbl-num-bold">${r.obligation.toLocaleString('id-ID')}</td>
+      <td class="${r.active>0?'tbl-green':'tbl-gray'}">${r.active}</td>
+      <td style="color:#6C757D">${r.lastUpdate}</td>
+    </tr>`).join('');
+}
+
+function filterSectors() {
+  const q=document.getElementById('sectorSearch').value.toLowerCase();
+  renderSectors(SECTORS.filter(s=>s.code.toLowerCase().includes(q)||s.name.toLowerCase().includes(q)));
+}
+
+function openSectorDetail(code) {
+  const sector=SECTORS.find(s=>s.code===code);
+  document.getElementById('rf-sector').style.display='none';
+  document.getElementById('rf-sector-detail').style.display='block';
+  document.getElementById('sectorDetailName').value=sector.name;
+  document.getElementById('sectorDetailBreadcrumb').innerHTML=`
+    <span class="breadcrumb-link" onclick="closeSectorDetail()">Sector Based</span>
+    <span class="breadcrumb-sep">›</span>
+    <span class="breadcrumb-cur">${sector.name}</span>
+    <div style="margin-left:auto">
+      <div class="dropdown">
+        <button class="btn-primary" onclick="toggleDD('detailBulkDD')">Bulk Action ▾</button>
+        <div class="dropdown-menu" id="detailBulkDD">
+          <div class="dropdown-item">Aktifkan</div>
+          <div class="dropdown-item">Inaktifkan</div>
+          <div class="dropdown-item">Konfirmasi Pembaruan</div>
+        </div>
+      </div>
+    </div>`;
+  expandedNodes={};
+  renderTree(code);
+  renderSectorObligations();
+}
+
+function closeSectorDetail() {
+  document.getElementById('rf-sector-detail').style.display='none';
+  document.getElementById('rf-sector').style.display='';
+}
+
+function renderTree(code) {
+  const tree = SECTOR_TREES[code]||[];
+  document.getElementById('sectorTree').innerHTML=buildTreeHTML(tree,0);
+}
+
+function buildTreeHTML(nodes,depth) {
+  return nodes.map(node=>{
+    const hasChildren=node.children&&node.children.length>0;
+    const expanded=expandedNodes[node.code];
+    const pad=12+depth*18;
+    return `<div>
+      <div class="tree-node" style="padding-left:${pad}px" onclick="${hasChildren?`toggleNode('${node.code}')`:''}" >
+        <input type="checkbox" style="accent-color:#1B3A6B;flex-shrink:0" onclick="event.stopPropagation()"/>
+        <span class="tree-toggle">${hasChildren?(expanded?'▾':'▸'):''}</span>
+        <span class="tree-code">${node.code}</span>
+        <span class="tree-name">${node.name}</span>
+        ${node.count!==undefined?`<span class="tree-count">${node.count}</span>`:'<span class="tree-count">-</span>'}
+      </div>
+      ${hasChildren&&expanded?buildTreeHTML(node.children,depth+1):''}
+    </div>`;
+  }).join('');
+}
+
+function toggleNode(code) {
+  expandedNodes[code]=!expandedNodes[code];
+  const sectorName=document.getElementById('sectorDetailName').value;
+  const sector=SECTORS.find(s=>s.name===sectorName);
+  if(sector) renderTree(sector.code);
+}
+
+function collapseAll() {
+  expandedNodes={};
+  const sectorName=document.getElementById('sectorDetailName').value;
+  const sector=SECTORS.find(s=>s.name===sectorName);
+  if(sector) renderTree(sector.code);
+}
+
+function renderSectorObligations() {
+  document.getElementById('sectorObligations').innerHTML=COMPLIANCE.slice(0,5).map((item,i)=>`
+    <div class="comp-item">
+      <div class="comp-badges">
+        <input type="checkbox" style="accent-color:#1B3A6B" onclick="event.stopPropagation()"/>
+        <span class="comp-code">${item.code}</span>
+        <span class="tag-new">New</span>
+      </div>
+      <div class="comp-desc">${item.description.substring(0,90)}...</div>
+    </div>`).join('');
+}
+
+// REGULATIONS TABLE
+let filteredRegs=REGULATIONS;
+function renderRegulations(data) {
+  filteredRegs=data;
+  const start=(regPage-1)*REG_ROWS, end=Math.min(regPage*REG_ROWS,data.length);
+  document.getElementById('regCount').textContent=`Menampilkan ${start+1}–${end} dari ${data.length} data`;
+  document.getElementById('regTbody').innerHTML=data.slice(start,end).map((r,i)=>`
+    <tr>
+      <td>${r.no}</td>
+      <td><span style="margin-right:6px">📁</span><span class="tbl-link">${r.hierarchy}</span></td>
+      <td class="${r.regulation>0?'tbl-num-bold':'tbl-gray'}">${r.regulation}</td>
+      <td style="font-weight:${r.obligation>0?600:400}">${r.obligation.toLocaleString('id-ID')}</td>
+      <td class="${r.active>0?'tbl-green':'tbl-gray'}">${r.active}</td>
+      <td style="color:#6C757D">${r.lastUpdate}</td>
+    </tr>`).join('');
+  renderRegPagination(data.length);
+}
+
+function filterRegulations() {
+  regPage=1;
+  const q=document.getElementById('regSearch').value.toLowerCase();
+  renderRegulations(REGULATIONS.filter(r=>r.hierarchy.toLowerCase().includes(q)));
+}
+
+function renderRegPagination(total) {
+  const pages=Math.ceil(total/REG_ROWS);
+  let html='';
+  for(let i=1;i<=pages;i++) html+=`<button class="page-btn${regPage===i?' active':''}" onclick="goRegPage(${i})">${i}</button>`;
+  if(regPage<pages) html+=`<button class="page-btn" onclick="goRegPage(${regPage+1})">›</button>`;
+  document.getElementById('regPagination').innerHTML=html;
+}
+
+function goRegPage(p) {
+  regPage=p;
+  renderRegulations(filteredRegs);
+}
+
+// OBLIGATION UPDATES
+function renderUpdates(data) {
+  document.getElementById('updCount').textContent=`| ${data.length} dari ${UPDATES.length} data`;
+  document.getElementById('updList').innerHTML=`<div>${data.map((item,i)=>`
+    <div class="upd-item">
+      <div class="upd-badges">
+        <input type="checkbox" style="accent-color:#1B3A6B"/>
+        <span class="upd-code">${item.code}</span>
+        ${item.tags.map(t=>tagBadge(t)).join('')}
+      </div>
+      <div class="upd-desc">${item.description}</div>
+    </div>`).join('')}</div>`;
+}
+
+function filterUpdates() {
+  const q=document.getElementById('updSearch').value.toLowerCase();
+  renderUpdates(UPDATES.filter(u=>u.code.toLowerCase().includes(q)||u.description.toLowerCase().includes(q)));
+}
+
+// ACTIVITY
+function renderActivity() {
+  document.getElementById('activityList').innerHTML=ACTIVITIES.map(({user,name,action,target,time,color})=>`
+    <div class="activity-item">
+      <div class="activity-avatar" style="background:${color}">${user}</div>
+      <div>
+        <div class="activity-text"><strong>${name}</strong> ${action} <span class="activity-target">${target}</span></div>
+        <div class="activity-time">${time}</div>
+      </div>
+    </div>`).join('');
+}
+
+// ═══════════════════ INIT ═══════════════════
+renderMonitorCards();
+renderPieChart();
+renderCompliance(COMPLIANCE);
+renderSectors(SECTORS);
+renderRegulations(REGULATIONS);
+renderUpdates(UPDATES);
+renderActivity();
+</script>
+</body>
+</html>
