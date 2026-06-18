@@ -1,0 +1,1745 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ININDYA — Nindya Karya</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f5f6fa;color:#333;min-height:100vh;display:flex;flex-direction:column}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:#f1f1f1}
+::-webkit-scrollbar-thumb{background:#ccc;border-radius:3px}
+a{text-decoration:none;color:inherit}
+button,input,select{font-family:inherit}
+
+/* ── TOPBAR ── */
+.topbar{height:50px;background:#fff;border-bottom:1px solid #e8e8e8;display:flex;align-items:center;padding:0 16px;position:fixed;top:0;left:0;right:0;z-index:300;gap:12px}
+.topbar-logo{display:flex;align-items:center;gap:8px;width:150px;flex-shrink:0}
+.topbar-logo img{height:32px}
+.topbar-logo-text{font-size:11px;font-weight:700;color:#1a1a1a;letter-spacing:.5px}
+.topbar-divider{width:1px;height:28px;background:#e8e8e8}
+.topbar-hamburger{background:none;border:none;cursor:pointer;color:#555;font-size:18px;padding:4px}
+.topbar-search{display:flex;align-items:center;gap:6px;background:#f5f5f5;border-radius:6px;padding:6px 12px;flex:1;max-width:300px}
+.topbar-search input{background:none;border:none;outline:none;font-size:12px;color:#555;width:100%}
+.topbar-search-icon{color:#aaa;font-size:13px}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:12px}
+.topbar-user{display:flex;align-items:center;gap:8px;cursor:pointer}
+.topbar-user-avatar{width:30px;height:30px;background:#e05b18;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700}
+.topbar-user-name{font-size:11px;font-weight:600;color:#333}
+.topbar-notif{position:relative;cursor:pointer;color:#555;font-size:16px}
+.notif-badge{position:absolute;top:-4px;right:-4px;background:#e05b18;color:#fff;font-size:8px;font-weight:700;width:14px;height:14px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.topbar-expand{background:none;border:none;cursor:pointer;color:#aaa;font-size:14px;padding:4px}
+
+/* ── LAYOUT ── */
+.app-body{display:flex;margin-top:50px;min-height:calc(100vh - 50px)}
+
+/* ── SIDEBAR ── */
+.sidebar{width:155px;background:#fff;border-right:1px solid #e8e8e8;position:fixed;top:50px;left:0;bottom:0;overflow-y:auto;transition:width .25s ease;z-index:200;flex-shrink:0}
+.sidebar.collapsed{width:0;overflow:hidden}
+.sidebar-section-label{font-size:9px;font-weight:700;color:#aaa;letter-spacing:1px;text-transform:uppercase;padding:14px 14px 4px}
+.sidebar-item{display:flex;align-items:center;justify-content:space-between;padding:7px 14px;cursor:pointer;transition:background .15s;position:relative}
+.sidebar-item:hover{background:#fdf3ee}
+.sidebar-item.active{color:#e05b18;font-weight:600}
+.sidebar-item.active::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:#e05b18;border-radius:0 2px 2px 0}
+.sidebar-item-inner{display:flex;align-items:center;gap:8px;font-size:11.5px;color:#444;flex:1;min-width:0}
+.sidebar-item.active .sidebar-item-inner{color:#e05b18}
+.sidebar-icon{font-size:14px;flex-shrink:0;width:16px;text-align:center}
+.sidebar-chevron{font-size:10px;color:#bbb;flex-shrink:0}
+.sidebar-sub{background:#fafafa;border-left:2px solid #f0f0f0;margin-left:0}
+.sidebar-sub-item{padding:5px 14px 5px 30px;font-size:11px;color:#666;cursor:pointer;transition:background .15s;position:relative}
+.sidebar-sub-item:hover{background:#fdf3ee;color:#e05b18}
+.sidebar-sub-item.active{color:#e05b18;font-weight:600;background:#fdf3ee}
+.sidebar-sub-item.active::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:#e05b18}
+.sidebar-group-label{font-size:9px;font-weight:700;color:#e05b18;letter-spacing:.8px;text-transform:uppercase;padding:8px 14px 2px}
+
+/* ── MAIN CONTENT ── */
+.main{margin-left:155px;flex:1;min-height:calc(100vh - 50px);transition:margin-left .25s ease}
+.main.sidebar-collapsed{margin-left:0}
+
+/* ── PAGE HEADER ── */
+.page-header{padding:20px 24px 0}
+.page-title{font-size:18px;font-weight:700;color:#222;margin-bottom:2px}
+.page-sub{font-size:11px;color:#aaa}
+.breadcrumb{display:flex;align-items:center;gap:4px;font-size:11px;color:#aaa;margin-bottom:16px;flex-wrap:wrap}
+.breadcrumb a{color:#aaa;cursor:pointer}
+.breadcrumb a:hover{color:#e05b18}
+.breadcrumb .sep{color:#ddd}
+.breadcrumb .cur{color:#e05b18;font-weight:600}
+
+/* ── ININDYA DASHBOARD ── */
+.dashboard-cards{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;padding:0 24px 20px}
+.dash-card{border-radius:10px;padding:16px;color:#fff;display:flex;align-items:center;gap:12px;min-height:80px}
+.dash-card-icon{font-size:22px;opacity:.9}
+.dash-card-label{font-size:10px;opacity:.85;margin-bottom:2px}
+.dash-card-val{font-size:22px;font-weight:800}
+.dash-card-dots{display:flex;gap:4px;margin-top:6px}
+.dot{width:8px;height:8px;border-radius:50%}
+
+/* ── RCS MODULE WRAPPER ── */
+.rcs-wrap{padding:0 24px 24px}
+.rcs-page{display:none}
+.rcs-page.active{display:block}
+
+/* ── RCS SUB-NAVBAR ── */
+.rcs-subnav{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:8px}
+.rcs-tabs{display:flex;gap:6px}
+.rcs-tab{border:1px solid #ddd;background:#fff;color:#555;border-radius:20px;padding:6px 16px;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s}
+.rcs-tab.active{background:#1B3A6B;color:#fff;border-color:#1B3A6B}
+.rcs-tab:hover:not(.active){background:#fdf3ee;border-color:#e05b18;color:#e05b18}
+.rcs-actions{display:flex;gap:8px}
+.btn-inindya-outline{border:1px solid #ddd;background:#fff;border-radius:6px;padding:6px 14px;font-size:12px;cursor:pointer;color:#555;transition:all .15s}
+.btn-inindya-outline:hover{border-color:#e05b18;color:#e05b18}
+.btn-inindya-primary{background:#1B3A6B;color:#fff;border:none;border-radius:6px;padding:6px 14px;font-size:12px;cursor:pointer;font-weight:600;transition:background .15s}
+.btn-inindya-primary:hover{background:#2B5298}
+.btn-inindya-orange{background:#e05b18;color:#fff;border:none;border-radius:6px;padding:6px 14px;font-size:12px;cursor:pointer;font-weight:600}
+.btn-inindya-orange:hover{background:#c44d12}
+.btn-sm-inindya{border:1px solid #ddd;background:#fff;border-radius:4px;padding:3px 9px;font-size:11px;cursor:pointer;color:#555}
+.btn-sm-inindya:hover{border-color:#e05b18;color:#e05b18}
+
+/* ── RCS VIEW TOGGLE ── */
+.view-toggle-row{display:flex;justify-content:flex-end;align-items:center;gap:8px;margin-bottom:14px}
+.toggle-lbl{font-size:12px;color:#666}
+.toggle-switch{width:38px;height:20px;border-radius:10px;cursor:pointer;position:relative;transition:background .2s;flex-shrink:0}
+.toggle-knob{position:absolute;top:2px;width:16px;height:16px;background:#fff;border-radius:50%;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+
+/* ── CARDS GRID ── */
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-bottom:20px}
+.rcs-card{background:#fff;border-radius:8px;border:1px solid #eee;padding:18px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.rcs-card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px}
+.rcs-card-title{font-size:12.5px;font-weight:700;color:#333}
+.rcs-card-sub{font-size:10.5px;color:#aaa;margin-top:2px}
+.rcs-card-menu{color:#ccc;cursor:pointer;font-size:15px}
+.big-number{font-size:30px;font-weight:800;color:#222;margin:8px 0 4px}
+.pct-green{font-size:12px;font-weight:700;color:#2E7D32;margin-left:8px}
+.pct-red{font-size:12px;font-weight:700;color:#C62828;margin-left:8px}
+.icon-circle-green{width:22px;height:22px;background:#2E7D32;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;flex-shrink:0}
+.icon-circle-gray{width:22px;height:22px;background:#ddd;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#666;font-size:12px;flex-shrink:0}
+.card-icon-row{display:flex;align-items:center;gap:8px}
+
+/* Donut */
+.donut-row{display:flex;align-items:center;gap:14px;margin-top:10px;flex-wrap:wrap}
+.donut-wrap{position:relative;flex-shrink:0}
+.donut-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.donut-pct{font-size:16px;font-weight:800;color:#222}
+.donut-txt{font-size:8px;color:#aaa}
+.bar-mini-section{flex:1;min-width:100px}
+.bar-mini-lbl{font-size:10px;color:#aaa;margin-bottom:6px}
+.bar-mini-row{display:flex;align-items:center;gap:5px;margin-bottom:5px}
+.bar-mini-name{font-size:10px;color:#666;width:40px}
+.bar-mini-track{flex:1;background:#f0f0f0;border-radius:2px;height:8px}
+.bar-mini-fill{height:100%;border-radius:2px}
+.bar-mini-val{font-size:10px;color:#666;width:14px;text-align:right}
+.group-hdr{display:flex;justify-content:space-between;margin-bottom:4px}
+.group-col{font-size:10px;color:#aaa;font-weight:600}
+.group-row{display:flex;justify-content:space-between;padding:3px 0;border-top:1px solid #f5f5f5}
+.group-name{font-size:10.5px;color:#444;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding-right:8px}
+.group-val{font-size:10.5px;color:#444;font-weight:600;flex-shrink:0}
+.info-bar-orange{margin-top:12px;background:#FFF3E0;border-radius:6px;padding:7px 12px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.info-bar-txt{font-size:10.5px;color:#555;flex:1}
+.info-bar-gray{margin-top:12px;background:#f8f8f8;border-radius:6px;padding:7px 12px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+
+/* RF summary card */
+.rf-stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
+.rf-stat-lbl{font-size:9px;color:#aaa;font-weight:700;text-transform:uppercase;margin-bottom:2px}
+.rf-stat-val{font-size:22px;font-weight:800;color:#222}
+.pie-row{display:flex;align-items:center;gap:12px;margin-top:10px;flex-wrap:wrap}
+.pie-legend{display:flex;flex-direction:column;gap:6px}
+.pie-legend-item{display:flex;align-items:center;gap:6px}
+.pie-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+.pie-lbl{font-size:10.5px;color:#444}
+
+/* ── BADGES ── */
+.badge{border-radius:4px;padding:2px 7px;font-size:10px;font-weight:600;white-space:nowrap}
+.badge-comply{background:#E8F5E9;color:#2E7D32;border:1px solid #A5D6A7}
+.badge-progress{background:#FFF8E1;color:#F57F17;border:1px solid #FFE082}
+.badge-unassigned{background:#f5f5f5;color:#888;border:1px solid #ddd}
+.badge-high{background:#FFEBEE;color:#C62828;border:1px solid #FFCDD2}
+.badge-medium{background:#FFF3E0;color:#E65100;border:1px solid #FFCC80}
+.badge-low{background:#E3F2FD;color:#1565C0;border:1px solid #BBDEFB}
+.tag-new{background:#E8F5E9;color:#2E7D32;border-radius:4px;padding:1px 6px;font-size:10px;font-weight:600;margin-right:3px}
+.tag-active{background:#E3F2FD;color:#1565C0;border-radius:4px;padding:1px 6px;font-size:10px;font-weight:600;margin-right:3px}
+.tag-version{background:#f5f5f5;color:#666;border-radius:4px;padding:1px 6px;font-size:10px;font-weight:600;margin-right:3px}
+
+/* ── ININDYA TABLE STYLE ── */
+.inindya-table-wrap{background:#fff;border-radius:8px;border:1px solid #eee;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.inindya-table-scroll{overflow-x:auto}
+.inindya-table{width:100%;border-collapse:collapse;min-width:560px}
+.inindya-table th{padding:9px 12px;text-align:left;font-size:10.5px;font-weight:700;color:#fff;background:#1B3A6B;white-space:nowrap;border-right:1px solid rgba(255,255,255,.1)}
+.inindya-table th:last-child{border-right:none}
+.inindya-table td{padding:9px 12px;font-size:11px;color:#444;border-bottom:1px solid #f5f5f5;vertical-align:middle}
+.inindya-table tr:last-child td{border-bottom:none}
+.inindya-table tr:hover td{background:#fdf3ee;cursor:pointer}
+.inindya-table tr:nth-child(even) td{background:#fafafa}
+.inindya-table tr:nth-child(even):hover td{background:#fdf3ee}
+.sort-icon{color:#aaa;font-size:9px;margin-left:2px}
+.tbl-link{color:#2B5298;cursor:pointer;font-weight:500}
+.tbl-link:hover{color:#e05b18}
+.tbl-bold{font-weight:700;color:#2B5298}
+.tbl-green{color:#2E7D32;font-weight:700}
+.tbl-gray{color:#bbb}
+.tbl-actions{display:flex;gap:4px;align-items:center;justify-content:flex-end}
+
+/* ── PAGINATION ── */
+.pagination-row{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#fff;border-top:1px solid #f0f0f0;flex-wrap:wrap;gap:8px}
+.page-size-row{display:flex;align-items:center;gap:6px;font-size:11px;color:#666}
+.page-size-sel{border:1px solid #ddd;border-radius:4px;padding:2px 5px;font-size:11px;color:#444}
+.page-btns{display:flex;gap:4px}
+.page-btn{width:26px;height:26px;border-radius:5px;border:1px solid #ddd;background:#fff;color:#444;font-size:11px;font-weight:600;cursor:pointer;transition:all .15s}
+.page-btn:hover{border-color:#e05b18;color:#e05b18}
+.page-btn.active{background:#1B3A6B;color:#fff;border-color:#1B3A6B}
+.page-info{font-size:11px;color:#888}
+
+/* ── COMPLIANCE LIST ── */
+.comp-list-wrap{background:#fff;border-radius:8px;border:1px solid #eee;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.comp-item{padding:10px 14px;border-bottom:1px solid #f5f5f5;cursor:pointer;transition:background .1s}
+.comp-item:last-child{border-bottom:none}
+.comp-item:hover{background:#fdf3ee}
+.comp-item.selected{background:#EBF0FA;border-left:3px solid #1B3A6B}
+.comp-badges-row{display:flex;align-items:center;gap:7px;margin-bottom:4px;flex-wrap:wrap}
+.comp-code{font-size:11px;font-weight:700;color:#1B3A6B}
+.comp-desc{font-size:11px;color:#555;line-height:1.5;padding-left:20px}
+.warn-banner{background:#FFF8E1;border:1px solid #FFE082;border-radius:6px;padding:7px 12px;font-size:11px;color:#7B5800;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+
+/* ── SEARCH BAR ── */
+.inindya-search-wrap{position:relative;flex:1;min-width:150px}
+.inindya-search-icon{position:absolute;left:9px;top:50%;transform:translateY(-50%);color:#bbb;font-size:13px;pointer-events:none}
+.inindya-search{width:100%;border:1px solid #ddd;border-radius:6px;padding:7px 10px 7px 28px;font-size:11.5px;outline:none;color:#444;transition:border-color .15s;background:#fff}
+.inindya-search:focus{border-color:#1B3A6B}
+
+/* ── SPLIT LAYOUT (compliance) ── */
+.split-layout{display:flex;gap:0;height:calc(100vh - 180px);min-height:400px}
+.split-list{flex:1;display:flex;flex-direction:column;gap:0;overflow:hidden}
+.split-detail{width:360px;flex-shrink:0;background:#fff;border:1px solid #eee;border-radius:8px;margin-left:14px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.split-detail.hidden{display:none}
+.detail-inner{flex:1;overflow-y:auto;padding:16px}
+.detail-sub-tabs{display:flex;overflow-x:auto;border-top:1px solid #eee;flex-shrink:0;padding:0 4px}
+.det-tab{background:none;border:none;border-bottom:2px solid transparent;color:#888;font-size:11px;font-weight:400;padding:8px 10px;cursor:pointer;white-space:nowrap;transition:all .15s}
+.det-tab.active{border-bottom-color:#e05b18;color:#e05b18;font-weight:600}
+.info-field{margin-bottom:12px}
+.info-field-lbl{font-size:10px;color:#aaa;font-weight:600;text-transform:uppercase;margin-bottom:2px}
+.info-field-val{font-size:11.5px;color:#333}
+
+/* ── TREE ── */
+.tree-wrap{border:1px solid #eee;border-radius:8px;overflow:hidden;background:#fff}
+.tree-node{display:flex;align-items:center;gap:5px;padding:7px 12px;border-bottom:1px solid #f5f5f5;cursor:pointer;transition:background .1s}
+.tree-node:hover{background:#fdf3ee}
+.tree-node:last-child{border-bottom:none}
+.tree-toggle{color:#1B3A6B;font-size:11px;width:12px;flex-shrink:0;user-select:none}
+.tree-code{font-size:10.5px;color:#1B3A6B;font-weight:700;flex-shrink:0}
+.tree-name{font-size:10.5px;color:#444;flex:1}
+.tree-count{background:#eee;color:#666;border-radius:10px;padding:1px 7px;font-size:10px;font-weight:700;flex-shrink:0}
+
+/* ── DROPDOWN ── */
+.dropdown{position:relative;display:inline-block}
+.dropdown-menu{position:absolute;right:0;top:110%;background:#fff;border:1px solid #eee;border-radius:6px;box-shadow:0 4px 14px rgba(0,0,0,.12);z-index:500;min-width:170px;display:none;overflow:hidden}
+.dropdown-menu.open{display:block}
+.dropdown-item{padding:8px 14px;font-size:11.5px;cursor:pointer;color:#444;border-bottom:1px solid #f5f5f5;transition:background .1s}
+.dropdown-item:last-child{border-bottom:none}
+.dropdown-item:hover{background:#fdf3ee;color:#e05b18}
+
+/* ── RF DETAIL SPLIT ── */
+.rf-split{display:flex;gap:14px;height:calc(100vh - 200px);min-height:350px}
+.rf-split-left{flex:1;overflow:auto;background:#fff;border-radius:8px;border:1px solid #eee;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.rf-split-right{width:280px;flex-shrink:0;overflow:auto;background:#fafafa;border-radius:8px;border:1px solid #eee;padding:14px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+
+/* ── TOOLBAR ── */
+.toolbar{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;align-items:center}
+
+/* ── EMPTY STATE ── */
+.empty-state{padding:40px;text-align:center;color:#bbb;font-size:12px}
+.empty-icon{font-size:28px;margin-bottom:8px}
+
+/* ── ACTIVITY ── */
+.activity-item{display:flex;align-items:flex-start;gap:10px;padding:12px 0;border-bottom:1px solid #f5f5f5}
+.activity-item:last-child{border-bottom:none}
+.activity-avatar{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700;flex-shrink:0}
+.activity-text{font-size:11.5px;color:#333;line-height:1.5}
+.activity-target{color:#2B5298;font-weight:600}
+.activity-time{font-size:10px;color:#aaa;margin-top:2px}
+
+/* ── ENFORCED ROW ── */
+.enforced-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:6px}
+.enforced-left{display:flex;align-items:center;gap:8px}
+.enforced-icon{width:18px;height:18px;background:#2E7D32;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;flex-shrink:0}
+.enforced-name{font-size:11px;font-weight:600;color:#333}
+.enforced-date{font-size:10px;color:#aaa}
+.btn-row{display:flex;gap:5px}
+
+/* ── ININDYA DASHBOARD extra ── */
+.news-card{background:#fff;border-radius:8px;border:1px solid #eee;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.04);margin-bottom:20px}
+.news-inner{height:280px;background:linear-gradient(135deg,#1a5276,#148f77);display:flex;align-items:flex-end;padding:20px;position:relative;overflow:hidden}
+.news-tag{background:#e05b18;color:#fff;font-size:9px;font-weight:700;padding:2px 8px;border-radius:3px;display:inline-block;margin-bottom:8px;letter-spacing:.5px}
+.news-title{color:#fff;font-size:15px;font-weight:700;line-height:1.4}
+.news-sub{color:rgba(255,255,255,.7);font-size:11px;margin-top:4px}
+.news-nav{display:flex;justify-content:space-between;align-items:center;position:absolute;inset:0;padding:10px}
+.news-arrow{background:rgba(255,255,255,.15);border:none;cursor:pointer;color:#fff;font-size:18px;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;align-self:center;transition:background .15s}
+.news-arrow:hover{background:rgba(255,255,255,.3)}
+.kpi-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.kpi-label{font-size:11px;color:#444;width:220px;flex-shrink:0}
+.kpi-track{flex:1;background:#f0f0f0;border-radius:10px;height:8px}
+.kpi-fill{height:100%;border-radius:10px;background:#1B3A6B}
+.kpi-pct{font-size:11px;color:#444;width:36px;text-align:right}
+.top-users-item{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid #f5f5f5}
+.top-users-item:last-child{border-bottom:none}
+.top-avatar{width:28px;height:28px;border-radius:50%;background:#1B3A6B;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700;flex-shrink:0}
+.top-name{font-size:11px;font-weight:600;color:#333;flex:1}
+.top-div{font-size:9.5px;color:#aaa}
+.top-score{font-size:12px;font-weight:700;color:#1B3A6B}
+.two-col{display:grid;grid-template-columns:1fr 340px;gap:16px}
+.kepatuhan-btn{background:#e05b18;color:#fff;border:none;border-radius:6px;padding:7px 16px;font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;white-space:nowrap}
+.kepatuhan-btn:hover{background:#c44d12}
+.filter-sel{border:1px solid #ddd;border-radius:6px;padding:6px 10px;font-size:11.5px;color:#444;outline:none;background:#fff;cursor:pointer}
+.filter-sel:focus{border-color:#1B3A6B}
+.kebat-wrap{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+
+/* ── TRANSITIONS ── */
+.fade-in{animation:fadeIn .2s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── FOOTER ── */
+.footer{padding:10px 24px;font-size:10px;color:#aaa;border-top:1px solid #f0f0f0;display:flex;justify-content:space-between;background:#fff}
+
+/* ── NEW DASHBOARD STYLES ── */
+.home-tab-bar{display:flex;gap:8px;margin-bottom:18px;border-bottom:2px solid #f0f0f0;padding-bottom:0}
+.home-tab{background:none;border:none;border-bottom:2px solid transparent;padding:8px 16px;font-size:12px;font-weight:600;color:#888;cursor:pointer;transition:all .2s;margin-bottom:-2px;display:flex;align-items:center;gap:6px}
+.home-tab:hover{color:#1B3A6B}
+.home-tab.active{color:#1B3A6B;border-bottom-color:#1B3A6B}
+.home-tab-icon{font-size:14px}
+
+.view-toggle-pill-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.view-toggle-pill{background:#f0f0f0;border-radius:20px;padding:3px;display:flex;gap:2px}
+.pill-btn{background:none;border:none;border-radius:16px;padding:5px 14px;font-size:11px;font-weight:600;color:#888;cursor:pointer;transition:all .2s}
+.pill-btn.active{background:#1B3A6B;color:#fff;box-shadow:0 2px 6px rgba(27,58,107,.3)}
+
+.kpi-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.kpi-chip{background:#fff;border-radius:10px;border:1px solid #eee;padding:12px 14px;display:flex;align-items:center;gap:12px;box-shadow:0 1px 3px rgba(0,0,0,.04);transition:transform .15s,box-shadow .15s;cursor:default}
+.kpi-chip:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(0,0,0,.08)}
+.kpi-chip-icon{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.kpi-chip-val{font-size:20px;font-weight:800;color:#222;line-height:1}
+.kpi-chip-lbl{font-size:10px;color:#aaa;margin-top:2px}
+.kpi-chip-delta{font-size:10px;font-weight:700;margin-top:3px}
+
+.dash-main-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.dash-rate-card{background:#fff;border-radius:10px;border:1px solid #eee;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+
+.group-row-rich{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid #f8f8f8}
+.group-row-rich:last-child{border-bottom:none}
+.group-row-bar{flex:1;background:#f0f0f0;border-radius:10px;height:5px;overflow:hidden}
+.group-row-bar-fill{height:100%;border-radius:10px;transition:width .6s ease}
+
+.dash-bottom-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:16px}
+
+/* Attention items */
+.attention-item{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid #f8f8f8;cursor:pointer;transition:background .1s}
+.attention-item:last-child{border-bottom:none}
+.attention-item:hover{background:#fdf3ee;margin:0 -12px;padding:7px 12px}
+.attention-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+/* RF Hero stats */
+.rf-hero-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.rf-hero-stat{background:#fff;border-radius:10px;border:1px solid #eee;padding:16px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.04);transition:transform .2s,box-shadow .2s;cursor:default;position:relative;overflow:hidden}
+.rf-hero-stat::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--accent)}
+.rf-hero-stat:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,.1)}
+.rf-hero-icon{font-size:22px;margin-bottom:8px}
+.rf-hero-val{font-size:28px;font-weight:800;color:#222;margin-bottom:4px}
+.rf-hero-lbl{font-size:10px;color:#aaa;font-weight:600;text-transform:uppercase;letter-spacing:.4px}
+
+/* Sector breakdown bars */
+.sector-bar-row{margin-bottom:12px}
+.sector-bar-header{display:flex;justify-content:space-between;margin-bottom:4px}
+.sector-bar-name{font-size:11px;font-weight:600;color:#333}
+.sector-bar-meta{font-size:10px;color:#aaa}
+.sector-bar-track{background:#f0f0f0;border-radius:10px;height:7px;overflow:hidden;cursor:pointer}
+.sector-bar-fill{height:100%;border-radius:10px;transition:width .7s ease}
+
+/* Hierarchy bars */
+.hier-bar-row{display:flex;align-items:center;gap:8px;margin-bottom:9px}
+.hier-bar-name{font-size:10.5px;color:#444;width:180px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hier-bar-track{flex:1;background:#f0f0f0;border-radius:10px;height:8px;overflow:hidden}
+.hier-bar-fill{height:100%;border-radius:10px;background:linear-gradient(90deg,#1B3A6B,#2B5298);transition:width .7s ease}
+.hier-bar-val{font-size:10px;font-weight:700;color:#1B3A6B;width:36px;text-align:right;flex-shrink:0}
+
+/* Trend SVG */
+#trendSvg{overflow:visible}
+
+/* Pie chart center label */
+.pie-center-lbl{pointer-events:none}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1100px){.dash-main-grid{grid-template-columns:1fr}.dash-bottom-grid{grid-template-columns:1fr 1fr}.rf-hero-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:900px){
+  .sidebar{width:0;overflow:hidden}
+  .main{margin-left:0}
+  .sidebar.mobile-open{width:155px}
+  .dashboard-cards{grid-template-columns:repeat(3,1fr)}
+  .two-col{grid-template-columns:1fr}
+  .kpi-strip{grid-template-columns:repeat(2,1fr)}
+  .dash-bottom-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ TOPBAR ══ -->
+<div class="topbar">
+  <div class="topbar-logo">
+    <div style="width:36px;height:36px;background:#e05b18;border-radius:8px;display:flex;align-items:center;justify-content:center">
+      <span style="color:#fff;font-weight:900;font-size:10px;letter-spacing:.5px">IN</span>
+    </div>
+    <div>
+      <div style="font-size:12px;font-weight:800;color:#1a1a1a;letter-spacing:.5px;line-height:1">ININDYA</div>
+      <div style="font-size:8px;color:#aaa;letter-spacing:.3px">INTEGRATED PLATFORM</div>
+    </div>
+  </div>
+  <div class="topbar-divider"></div>
+  <button class="topbar-hamburger" onclick="toggleSidebar()">☰</button>
+  <div class="topbar-search">
+    <span class="topbar-search-icon">🔍</span>
+    <input placeholder="Cari menu..."/>
+  </div>
+  <div class="topbar-right">
+    <button class="topbar-expand">⛶</button>
+    <div class="topbar-notif">
+      🔔
+      <div class="notif-badge">25</div>
+    </div>
+    <div class="topbar-user">
+      <div class="topbar-user-avatar">RS</div>
+      <div>
+        <div class="topbar-user-name">RADEN MAS DAMA ADITYA SATGUNA</div>
+        <div style="font-size:9px;color:#aaa">Legal Division</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ APP BODY ══ -->
+<div class="app-body">
+
+<!-- ══ SIDEBAR ══ -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-section-label">Main</div>
+  <div class="sidebar-item" onclick="navTo('dashboard',this)">
+    <div class="sidebar-item-inner"><span class="sidebar-icon">🏠</span>Dashboard</div>
+  </div>
+  <div class="sidebar-item" onclick="navTo('docsystem',this)">
+    <div class="sidebar-item-inner"><span class="sidebar-icon">📁</span>Document System</div>
+    <span class="sidebar-chevron">›</span>
+  </div>
+
+  <!-- LENS -->
+  <div class="sidebar-item active" onclick="toggleLENS(this)">
+    <div class="sidebar-item-inner">
+      <span class="sidebar-icon" style="font-size:13px">⚖</span>LENS
+    </div>
+    <span class="sidebar-chevron" id="lens-chevron">∧</span>
+  </div>
+  <div id="lens-submenu" class="sidebar-sub">
+    <div class="sidebar-sub-item" onclick="navTo('legits',this)">Legits ›</div>
+    <div class="sidebar-group-label">KOMUNIKASI</div>
+    <div class="sidebar-sub-item" onclick="navTo('dashboard',this)">Dashboard</div>
+    <div class="sidebar-sub-item" onclick="navTo('perizinan-oss',this)">Perizinan OSS</div>
+    <div class="sidebar-sub-item" onclick="navTo('perizinan-staf',this)">Perizinan OSS (Staf LEGAL)</div>
+    <div class="sidebar-sub-item" onclick="navTo('rekomendasi',this)">Rekomendasi Hukum</div>
+    <div class="sidebar-sub-item" onclick="navTo('rekomendasi-staf',this)">Rekomendasi Hukum (Staf LEGAL)</div>
+    <div class="sidebar-sub-item" onclick="navTo('comp-dokumen',this)">Compliance - Dokumentasi Hukum</div>
+    <div class="sidebar-sub-item active" onclick="navTo('rcs-home',this)" id="nav-rcs-home">Compliance - Peraturan yang Diacu</div>
+    <div class="sidebar-sub-item" onclick="navTo('peraturan-approval',this)">Compliance - Peraturan yang Diacu (Approval)</div>
+    <div class="sidebar-sub-item" onclick="navTo('kepatuhan',this)">Compliance - Kepatuhan Nindya</div>
+  </div>
+
+  <div class="sidebar-item" onclick="toggleGroup('learning-menu',this)">
+    <div class="sidebar-item-inner"><span class="sidebar-icon">📚</span>Learning</div>
+    <span class="sidebar-chevron">›</span>
+  </div>
+  <div class="sidebar-item" onclick="toggleGroup('social-menu',this)">
+    <div class="sidebar-item-inner"><span class="sidebar-icon">👥</span>Social</div>
+    <span class="sidebar-chevron">›</span>
+  </div>
+  <div class="sidebar-item" onclick="toggleGroup('info-menu',this)">
+    <div class="sidebar-item-inner"><span class="sidebar-icon">ℹ</span>Informations</div>
+    <span class="sidebar-chevron">›</span>
+  </div>
+  <div class="sidebar-item" onclick="toggleGroup('comm-menu',this)">
+    <div class="sidebar-item-inner"><span class="sidebar-icon">💬</span>Communications</div>
+    <span class="sidebar-chevron">›</span>
+  </div>
+  <div class="sidebar-item" onclick="toggleGroup('eoffice-menu',this)">
+    <div class="sidebar-item-inner"><span class="sidebar-icon">🏢</span>e-Office</div>
+    <span class="sidebar-chevron">›</span>
+  </div>
+  <div class="sidebar-item" onclick="toggleGroup('haloit-menu',this)">
+    <div class="sidebar-item-inner"><span class="sidebar-icon">💻</span>Halo IT</div>
+    <span class="sidebar-chevron">›</span>
+  </div>
+  <div class="sidebar-item" onclick="toggleGroup('perf-menu',this)">
+    <div class="sidebar-item-inner"><span class="sidebar-icon">📊</span>Performance</div>
+    <span class="sidebar-chevron">›</span>
+  </div>
+  <div style="height:50px"></div>
+  <div class="sidebar-item" onclick="void(0)" style="position:sticky;bottom:0;background:#fff;border-top:1px solid #f0f0f0">
+    <div class="sidebar-item-inner"><span class="sidebar-icon">🚪</span>Logout</div>
+  </div>
+</div>
+
+<!-- ══ MAIN ══ -->
+<div class="main" id="main">
+
+<!-- ══ ININDYA DASHBOARD ══ -->
+<div id="page-dashboard" class="fade-in" style="display:none">
+  <div class="page-header">
+    <div class="page-title">Dashboard</div>
+    <div class="page-sub" style="margin-bottom:14px">Summary Information</div>
+  </div>
+  <div class="dashboard-cards">
+    <div class="dash-card" style="background:linear-gradient(135deg,#e05b18,#f07c3a)">
+      <div><div class="dash-card-label">Total Users</div><div class="dash-card-val">1021</div></div>
+      <div class="dash-card-icon" style="margin-left:auto">👤</div>
+    </div>
+    <div class="dash-card" style="background:linear-gradient(135deg,#d4ac0d,#f1c40f)">
+      <div><div class="dash-card-label">Users Today</div><div class="dash-card-val">111</div></div>
+      <div class="dash-card-icon" style="margin-left:auto">📈</div>
+    </div>
+    <div class="dash-card" style="background:linear-gradient(135deg,#922b21,#c0392b)">
+      <div><div class="dash-card-label">New Procedure</div><div class="dash-card-val">28</div></div>
+      <div class="dash-card-icon" style="margin-left:auto">📄</div>
+    </div>
+    <div class="dash-card" style="background:linear-gradient(135deg,#1e8449,#27ae60)">
+      <div><div class="dash-card-label">Unread Letter</div><div class="dash-card-val">8</div>
+      <div class="dash-card-dots"><div class="dot" style="background:#f9e79f"></div><div class="dot" style="background:#82e0aa"></div><div class="dot" style="background:#f1948a"></div></div>
+      </div>
+      <div class="dash-card-icon" style="margin-left:auto">✉</div>
+    </div>
+    <div class="dash-card" style="background:linear-gradient(135deg,#555,#777)">
+      <div><div class="dash-card-label">Total Compliance</div><div class="dash-card-val">81</div>
+      <div class="dash-card-dots"><div class="dot" style="background:#f9e79f"></div><div class="dot" style="background:#82e0aa"></div><div class="dot" style="background:#f1948a"></div></div>
+      </div>
+      <div class="dash-card-icon" style="margin-left:auto">✅</div>
+    </div>
+    <div class="dash-card" style="background:linear-gradient(135deg,#1a6da8,#2e86c1)">
+      <div><div class="dash-card-label">Total Regulation</div><div class="dash-card-val">153</div></div>
+      <div class="dash-card-icon" style="margin-left:auto">📋</div>
+    </div>
+  </div>
+  <div style="padding:0 24px 24px">
+    <div class="two-col">
+      <div>
+        <div class="news-card">
+          <div class="news-inner">
+            <div style="position:relative;z-index:2">
+              <div class="news-tag">BERITA NINDYA</div>
+              <div class="news-title">Komut Nindya Karya Minta Percepatan Proyek Sekolah Rakyat Di Sulsel: Tambah 700 Pekerja Hingga Double Shift</div>
+              <div class="news-sub">Makassar — Komisaris Utama PT Nindya Karya, Michael Umbas, meninjau dua proyek pembangunan Sekolah R...</div>
+            </div>
+            <div class="news-nav" style="position:absolute;inset:0;display:flex;justify-content:space-between;align-items:center;padding:14px">
+              <button class="news-arrow">‹</button>
+              <button class="news-arrow">›</button>
+            </div>
+          </div>
+        </div>
+        <div class="rcs-card">
+          <div style="font-size:13px;font-weight:700;color:#333;margin-bottom:14px">📊 KPI Submissions by Division</div>
+          ${[['DIVISI SUPPLY CHAIN MANAGEMENT',95.8,'#1B3A6B'],['DIVISI QHSE',100,'#2E7D32'],['DIVISI HUMAN CAPITAL',88,'#e05b18'],['DIVISI LEGAL',92,'#5B2D8E'],['DIVISI KEUANGAN',78,'#C62828']].map(([n,v,c])=>`
+          <div class="kpi-row">
+            <div class="kpi-label">${n}</div>
+            <div class="kpi-track"><div class="kpi-fill" style="width:${v}%;background:${c}"></div></div>
+            <div class="kpi-pct">${v}%</div>
+          </div>`).join('')}
+        </div>
+      </div>
+      <div>
+        <div class="rcs-card" style="margin-bottom:14px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+            <span style="font-size:13px;font-weight:700;color:#333">🏆 Top 10 Active Users</span>
+            <span style="background:#e05b18;color:#fff;font-size:9px;font-weight:700;padding:2px 7px;border-radius:3px">This Month</span>
+          </div>
+          ${[['SF','Sugeng Febry Hariyanto','Sekretariat Perusahaan',838,'#1B3A6B'],['BR','Berman','Divisi Gedung',818,'#e05b18'],['IW','I Wayan Badra','Divisi QHSE',574,'#2E7D32'],['SB','Said Banyal','Divisi Riset & TI',381,'#5B2D8E'],['MR','Mustika Rahmadayanti','Divisi Manajemen Risiko',131,'#C62828'],['MA','Muhammad Arraf Rezkia R','Divisi Manajemen Risiko',129,'#d4ac0d'],['KP','Kartika Purnama Sari','Divisi Legal',126,'#e05b18'],['MB','Mokhammad Barlian S','Divisi Gedung',121,'#555'],['SH','Syahrecky Hidayat I','Divisi Riset & TI',117,'#1a6da8'],['FA','Feraliana Audia Utami','Divisi Riset & TI',113,'#2E7D32']].map(([i,n,d,s,c])=>`
+          <div class="top-users-item">
+            <div class="top-avatar" style="background:${c}">${i}</div>
+            <div class="top-name">${n}<div class="top-div">${d}</div></div>
+            <div class="top-score">${s}</div>
+          </div>`).join('')}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ KEPATUHAN NINDYA PAGE (existing) ══ -->
+<div id="page-kepatuhan" class="fade-in" style="display:none">
+  <div class="page-header">
+    <div class="breadcrumb">
+      <span>🏠</span><span class="sep">›</span>
+      <a>LENS</a><span class="sep">›</span>
+      <a>Komunikasi</a><span class="sep">›</span>
+      <a>Compliance</a><span class="sep">›</span>
+      <span class="cur">Kepatuhan Nindya</span>
+    </div>
+    <div class="page-title">Kepatuhan Nindya</div>
+    <div class="page-sub" style="margin-bottom:14px">Kepatuhan Nindya</div>
+  </div>
+  <div style="padding:0 24px 24px">
+    <div class="kebat-wrap">
+      <button class="kepatuhan-btn">+ Kepatuhan</button>
+      <select class="filter-sel"><option>-- Semua --</option><option>Bulanan</option><option>Tahunan</option><option>Triwulan</option></select>
+      <select class="filter-sel"><option>-- Semua --</option><option>Comply</option><option>In Progress</option><option>Unassigned</option></select>
+      <button style="background:#2E7D32;color:#fff;border:none;border-radius:50%;width:30px;height:30px;cursor:pointer;font-size:14px">✓</button>
+    </div>
+    <div style="display:flex;gap:120px;margin-bottom:12px;padding:0 8px">
+      <div style="font-size:11px;color:#bbb;font-weight:600;width:20px">☐</div>
+      <div style="font-size:11px;color:#bbb;font-weight:600">Reminder</div>
+    </div>
+    <div style="background:#f8f8f8;border-radius:6px;padding:6px 12px;margin-bottom:10px">
+      <div style="font-size:11px;color:#888;display:flex;align-items:center;gap:8px">
+        <span>☐</span><span style="font-weight:600">Kepatuhan Nindya</span>
+      </div>
+    </div>
+    <div class="inindya-table-wrap">
+      <div class="inindya-table-scroll">
+        <table class="inindya-table">
+          <thead><tr>
+            <th style="width:32px"><input type="checkbox" style="accent-color:#e05b18"/></th>
+            <th>No <span class="sort-icon">⇅</span></th>
+            <th>Dasar Hukum <span class="sort-icon">⇅</span></th>
+            <th>Dilaporkan Kepada <span class="sort-icon">⇅</span></th>
+            <th>Unit Kerja Terkait <span class="sort-icon">⇅</span></th>
+            <th>Jenis <span class="sort-icon">⇅</span></th>
+            <th>Status <span class="sort-icon">⇅</span></th>
+            <th>Created By <span class="sort-icon">⇅</span></th>
+            <th></th>
+          </tr></thead>
+          <tbody id="kepatuhan-tbody"></tbody>
+        </table>
+      </div>
+      <div class="pagination-row">
+        <div class="page-info">Showing 1 to 10 of 81 entries</div>
+        <div class="page-btns">
+          <button class="page-btn">Previous</button>
+          <button class="page-btn active">1</button>
+          <button class="page-btn">2</button>
+          <button class="page-btn">3</button>
+          <button class="page-btn">4</button>
+          <button class="page-btn">5</button>
+          <span style="font-size:11px;color:#aaa;padding:0 4px">...</span>
+          <button class="page-btn">9</button>
+          <button class="page-btn">Next</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer">
+    <a href="#" style="color:#e05b18;font-size:10px">Nindya Karya ↑</a>
+    <span>Ver. 1.2.0 © Nindya Karya</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     RCS MODULE — Compliance Peraturan yang Diacu
+══════════════════════════════════════════════════ -->
+<div id="page-rcs" class="fade-in" style="display:none">
+<div class="page-header">
+  <div class="breadcrumb">
+    <span>🏠</span><span class="sep">›</span>
+    <a onclick="navTo('dashboard',null)">LENS</a><span class="sep">›</span>
+    <a>Komunikasi</a><span class="sep">›</span>
+    <a>Compliance</a><span class="sep">›</span>
+    <span class="cur" id="rcs-breadcrumb-cur">Peraturan yang Diacu</span>
+  </div>
+  <div class="page-title" id="rcs-page-title">Compliance — Peraturan yang Diacu</div>
+  <div class="page-sub" style="margin-bottom:12px">Nindya Regulatory Compliance System</div>
+</div>
+<div class="rcs-wrap">
+
+  <!-- RCS SUB-NAV -->
+  <div class="rcs-subnav">
+    <div class="rcs-tabs">
+      <button class="rcs-tab active" onclick="switchRCSTab('home',this)">🏠 Home Dashboard</button>
+      <button class="rcs-tab" onclick="switchRCSTab('compliance',this)">📋 Compliance Monitor</button>
+      <button class="rcs-tab" onclick="switchRCSTab('regulatory',this)">🏛 Regulatory Framework</button>
+      <button class="rcs-tab" onclick="switchRCSTab('activity',this)">📌 Activity</button>
+    </div>
+    <div class="rcs-actions">
+      <button class="btn-inindya-outline">⚙ Filter</button>
+      <button class="btn-inindya-primary">↓ Unduh Laporan</button>
+    </div>
+  </div>
+
+  <!-- ── RCS: HOME DASHBOARD (RICH) ── -->
+  <div id="rcs-home" class="rcs-page active">
+
+    <!-- HOME TAB BAR -->
+    <div class="home-tab-bar">
+      <button class="home-tab active" onclick="switchHomeTab('monitor',this)" data-tab="monitor">
+        <span class="home-tab-icon">📊</span> Compliance Monitor
+      </button>
+      <button class="home-tab" onclick="switchHomeTab('framework',this)" data-tab="framework">
+        <span class="home-tab-icon">🏛</span> Regulatory Framework
+      </button>
+    </div>
+
+    <!-- ═══ MONITOR TAB ═══ -->
+    <div id="rcs-home-monitor">
+      <!-- View toggle -->
+      <div class="view-toggle-pill-row">
+        <div class="view-toggle-pill" id="viewPill">
+          <button class="pill-btn active" id="pillObl" onclick="setView('obligation')">Obligation Based</button>
+          <button class="pill-btn" id="pillReg" onclick="setView('regulation')">Regulation Based</button>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:#888">
+          <span>Auto refresh</span>
+          <span style="color:#2E7D32;font-weight:600">● Live</span>
+        </div>
+      </div>
+
+      <!-- KPI STRIP -->
+      <div class="kpi-strip" id="kpiStrip"></div>
+
+      <!-- MAIN DASHBOARD GRID -->
+      <div class="dash-main-grid">
+        <!-- LEFT: Compliance Rate big card -->
+        <div class="rcs-card dash-rate-card">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
+            <div>
+              <div style="font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Compliance Rate</div>
+              <div style="font-size:11px;color:#aaa" id="rateSubLabel">26 dari 37 Comply Obligations</div>
+            </div>
+            <div style="display:flex;gap:6px">
+              <button class="btn-sm-inindya">Export</button>
+              <span style="color:#ccc;cursor:pointer;font-size:16px">⋮</span>
+            </div>
+          </div>
+
+          <!-- Big donut -->
+          <div style="display:flex;align-items:center;gap:24px;margin-bottom:20px">
+            <div style="position:relative;flex-shrink:0">
+              <svg id="bigDonutSvg" width="140" height="140" viewBox="0 0 140 140"></svg>
+              <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center">
+                <div style="font-size:28px;font-weight:800;color:#222" id="bigDonutPct">70%</div>
+                <div style="font-size:10px;color:#aaa">Comply</div>
+              </div>
+            </div>
+            <div style="flex:1">
+              <div style="font-size:10px;color:#aaa;font-weight:700;margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px">Compliance by Priority</div>
+              <div id="priorityBars"></div>
+              <div style="display:flex;gap:12px;margin-top:10px">
+                <div style="display:flex;align-items:center;gap:4px"><div style="width:8px;height:8px;border-radius:2px;background:#C62828"></div><span style="font-size:10px;color:#666">High</span></div>
+                <div style="display:flex;align-items:center;gap:4px"><div style="width:8px;height:8px;border-radius:2px;background:#F57F17"></div><span style="font-size:10px;color:#666">Medium</span></div>
+                <div style="display:flex;align-items:center;gap:4px"><div style="width:8px;height:8px;border-radius:2px;background:#1565C0"></div><span style="font-size:10px;color:#666">Low</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Progress bar overall -->
+          <div style="background:#f5f5f5;border-radius:8px;padding:12px 14px;margin-bottom:12px">
+            <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+              <span style="font-size:11px;color:#555">Overall Progress</span>
+              <span style="font-size:11px;font-weight:700;color:#1B3A6B" id="overallPctLabel">70%</span>
+            </div>
+            <div style="background:#e8e8e8;border-radius:10px;height:8px;overflow:hidden">
+              <div id="overallBar" style="height:100%;border-radius:10px;background:linear-gradient(90deg,#1B3A6B,#2B5298);transition:width .8s ease"></div>
+            </div>
+          </div>
+
+          <!-- CTA -->
+          <div style="background:linear-gradient(135deg,#1B3A6B,#2B5298);border-radius:8px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between">
+            <div>
+              <div style="color:rgba(255,255,255,.7);font-size:10px;margin-bottom:2px">Status Kewajiban</div>
+              <div style="color:#fff;font-size:12px;font-weight:600" id="ctaText">Perusahaan telah mematuhi <strong>26</strong> dari <strong>37</strong> kewajiban</div>
+            </div>
+            <button onclick="switchRCSTab('compliance',document.querySelectorAll('.rcs-tab')[1])" style="background:#e05b18;color:#fff;border:none;border-radius:6px;padding:7px 14px;font-size:11px;cursor:pointer;font-weight:600;white-space:nowrap;flex-shrink:0;margin-left:12px">Comply Sekarang →</button>
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN -->
+        <div style="display:flex;flex-direction:column;gap:14px">
+
+          <!-- Comply by Group -->
+          <div class="rcs-card" style="flex:1">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+              <div style="display:flex;align-items:center;gap:8px">
+                <div style="width:28px;height:28px;background:linear-gradient(135deg,#2E7D32,#4CAF50);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px">✓</div>
+                <div>
+                  <div style="font-size:12px;font-weight:700;color:#222" id="complyGroupTitle">Obligation Comply by Group</div>
+                  <div style="font-size:10px;color:#aaa">Periode berjalan</div>
+                </div>
+              </div>
+              <div style="text-align:right">
+                <div style="font-size:24px;font-weight:800;color:#222" id="complyCount">26</div>
+                <div style="font-size:11px;font-weight:700;color:#2E7D32">70%</div>
+              </div>
+            </div>
+            <div id="complyGroupList" style="display:flex;flex-direction:column;gap:0"></div>
+          </div>
+
+          <!-- In Progress by Group -->
+          <div class="rcs-card" style="flex:1">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+              <div style="display:flex;align-items:center;gap:8px">
+                <div style="width:28px;height:28px;background:linear-gradient(135deg,#F57F17,#FF9800);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px">⏳</div>
+                <div>
+                  <div style="font-size:12px;font-weight:700;color:#222" id="progressGroupTitle">In Progress by Group</div>
+                  <div style="font-size:10px;color:#aaa">Menunggu tindak lanjut</div>
+                </div>
+              </div>
+              <div style="text-align:right">
+                <div style="font-size:24px;font-weight:800;color:#222" id="progressCount">11</div>
+                <div style="font-size:11px;font-weight:700;color:#F57F17">30%</div>
+              </div>
+            </div>
+            <div id="progressGroupList" style="display:flex;flex-direction:column;gap:0"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BOTTOM ROW: Recent activity + quick stats -->
+      <div class="dash-bottom-grid">
+        <!-- Recent obligations needing attention -->
+        <div class="rcs-card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+            <div style="font-size:12px;font-weight:700;color:#222">⚠ Perlu Perhatian</div>
+            <button onclick="switchRCSTab('compliance',document.querySelectorAll('.rcs-tab')[1])" style="font-size:10px;color:#1B3A6B;background:none;border:none;cursor:pointer;font-weight:600">Lihat semua →</button>
+          </div>
+          <div id="attentionList"></div>
+        </div>
+        <!-- Trend mini -->
+        <div class="rcs-card">
+          <div style="font-size:12px;font-weight:700;color:#222;margin-bottom:4px">📈 Compliance Trend</div>
+          <div style="font-size:10px;color:#aaa;margin-bottom:14px">6 bulan terakhir</div>
+          <svg id="trendSvg" width="100%" height="90" viewBox="0 0 260 90" preserveAspectRatio="none"></svg>
+          <div style="display:flex;justify-content:space-between;margin-top:4px">
+            <span style="font-size:9px;color:#aaa">Jan</span><span style="font-size:9px;color:#aaa">Feb</span>
+            <span style="font-size:9px;color:#aaa">Mar</span><span style="font-size:9px;color:#aaa">Apr</span>
+            <span style="font-size:9px;color:#aaa">Mei</span><span style="font-size:9px;color:#aaa">Jun</span>
+          </div>
+        </div>
+        <!-- Sector coverage -->
+        <div class="rcs-card">
+          <div style="font-size:12px;font-weight:700;color:#222;margin-bottom:14px">🗂 Coverage per Sektor</div>
+          <div id="sectorCoverage"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ REGULATORY FRAMEWORK TAB ═══ -->
+    <div id="rcs-home-framework" style="display:none">
+      <!-- Hero stats row -->
+      <div class="rf-hero-grid">
+        <div class="rf-hero-stat" style="--accent:#1B3A6B">
+          <div class="rf-hero-icon">🗂</div>
+          <div class="rf-hero-val" data-target="4">4</div>
+          <div class="rf-hero-lbl">Total Sektor</div>
+        </div>
+        <div class="rf-hero-stat" style="--accent:#e05b18">
+          <div class="rf-hero-icon">📋</div>
+          <div class="rf-hero-val" data-target="4294">4.294</div>
+          <div class="rf-hero-lbl">Total Kewajiban</div>
+        </div>
+        <div class="rf-hero-stat" style="--accent:#5B2D8E">
+          <div class="rf-hero-icon">🏛</div>
+          <div class="rf-hero-val" data-target="27">27</div>
+          <div class="rf-hero-lbl">Hierarki Peraturan</div>
+        </div>
+        <div class="rf-hero-stat" style="--accent:#2E7D32">
+          <div class="rf-hero-icon">📜</div>
+          <div class="rf-hero-val" data-target="353">353</div>
+          <div class="rf-hero-lbl">Total Peraturan</div>
+        </div>
+      </div>
+
+      <!-- Two column below -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+        <!-- Donut chart card -->
+        <div class="rcs-card">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px">
+            <div>
+              <div style="font-size:12px;font-weight:700;color:#222">Obligation Type Distribution</div>
+              <div style="font-size:10px;color:#aaa;margin-top:2px">Dikategorikan berdasarkan jenis kewajiban</div>
+            </div>
+            <select style="font-size:10px;border:1px solid #eee;border-radius:4px;padding:3px 6px;color:#555;outline:none">
+              <option>By Obligation Type</option>
+              <option>By Penalty</option>
+            </select>
+          </div>
+          <div style="display:flex;align-items:center;gap:20px">
+            <div style="position:relative;flex-shrink:0">
+              <svg width="150" height="150" viewBox="0 0 150 150" id="pieSvg"></svg>
+              <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center">
+                <div style="font-size:16px;font-weight:800;color:#222">5.287</div>
+                <div style="font-size:9px;color:#aaa">Total</div>
+              </div>
+            </div>
+            <div class="pie-legend" id="pieLegend"></div>
+          </div>
+        </div>
+
+        <!-- Sector breakdown -->
+        <div class="rcs-card">
+          <div style="font-size:12px;font-weight:700;color:#222;margin-bottom:4px">Breakdown per Sektor</div>
+          <div style="font-size:10px;color:#aaa;margin-bottom:16px">Klik sektor untuk lihat detail</div>
+          <div id="rfSectorBreakdown"></div>
+          <div style="margin-top:14px;padding-top:12px;border-top:1px solid #f5f5f5">
+            <button onclick="switchRCSTab('regulatory',document.querySelectorAll('.rcs-tab')[2])" style="width:100%;background:#1B3A6B;color:#fff;border:none;border-radius:7px;padding:9px;font-size:12px;font-weight:600;cursor:pointer;">Lihat Regulatory Framework Lengkap →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Regulation hierarchy overview -->
+      <div class="rcs-card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+          <div>
+            <div style="font-size:12px;font-weight:700;color:#222">Hierarki Peraturan — Overview</div>
+            <div style="font-size:10px;color:#aaa;margin-top:2px">Top 6 hierarki berdasarkan jumlah kewajiban</div>
+          </div>
+          <button onclick="switchRFSection('regulation',document.querySelectorAll('#rcs-regulatory .rcs-tab')[1]); switchRCSTab('regulatory',document.querySelectorAll('.rcs-tab')[2]);" style="font-size:10px;color:#1B3A6B;background:none;border:none;cursor:pointer;font-weight:600">Lihat semua →</button>
+        </div>
+        <div id="rfHierarchyBars"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── RCS: COMPLIANCE MONITOR ── -->
+  <div id="rcs-compliance" class="rcs-page" style="display:none">
+    <div class="split-layout">
+      <div class="split-list">
+        <div class="toolbar">
+          <div class="inindya-search-wrap">
+            <span class="inindya-search-icon">🔍</span>
+            <input class="inindya-search" id="compSearch" placeholder="Cari kewajiban compliance..." oninput="filterCompliance()"/>
+          </div>
+          <button class="btn-inindya-outline">⚙ Filter</button>
+          <div class="dropdown">
+            <button class="btn-inindya-primary" onclick="toggleDD('sortDD')">Bulk Action ▾</button>
+            <div class="dropdown-menu" id="sortDD">
+              <div class="dropdown-item">Last Modified (Newest)</div>
+              <div class="dropdown-item">Last Modified (Oldest)</div>
+              <div class="dropdown-item">Due Date (Newest)</div>
+              <div class="dropdown-item">Due Date (Oldest)</div>
+            </div>
+          </div>
+        </div>
+        <div class="warn-banner">
+          <span>⚠ Compliance dengan status Unassigned tidak mempengaruhi compliance rate di dashboard.</span>
+          <span style="cursor:pointer;color:#bbb" onclick="this.parentElement.style.display='none'">✕</span>
+        </div>
+        <div class="page-info" id="compCount" style="margin-bottom:6px;font-size:11px;color:#888"></div>
+        <div class="comp-list-wrap" style="flex:1;overflow-y:auto" id="compList"></div>
+      </div>
+      <div class="split-detail hidden" id="detailPanel">
+        <div class="detail-inner">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px">
+            <div id="detailBadges" style="display:flex;gap:5px;flex-wrap:wrap"></div>
+            <button onclick="document.getElementById('detailPanel').classList.add('hidden')" style="background:none;border:none;cursor:pointer;color:#bbb;font-size:15px;margin-left:8px;flex-shrink:0">✕</button>
+          </div>
+          <div class="info-field-val" style="font-size:12px;font-weight:600;color:#1B3A6B;line-height:1.4;margin-bottom:10px" id="detailTitle"></div>
+          <div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap">
+            <button class="btn-sm-inindya">↗ Buka Detail</button>
+            <button class="btn-sm-inindya">✏ Edit Alias</button>
+          </div>
+          <div class="enforced-row">
+            <div class="enforced-left">
+              <div class="enforced-icon">✓</div>
+              <div><div class="enforced-name">Enforced</div><div class="enforced-date">02 Agu 2024</div></div>
+            </div>
+            <div class="btn-row">
+              <button class="btn-sm-inindya">Inaktifkan</button>
+              <button class="btn-sm-inindya">•••</button>
+            </div>
+          </div>
+          <div class="detail-sub-tabs">
+            <button class="det-tab active" onclick="switchDetTab('Information',this)">Information</button>
+            <button class="det-tab" onclick="switchDetTab('Checklist',this)">Checklist & File</button>
+            <button class="det-tab" onclick="switchDetTab('Regulation',this)">Regulation</button>
+            <button class="det-tab" onclick="switchDetTab('Collaboration',this)">Collaboration</button>
+            <button class="det-tab" onclick="switchDetTab('Activity',this)">Activity</button>
+          </div>
+          <div style="padding-top:14px" id="detailTabContent"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── RCS: REGULATORY FRAMEWORK ── -->
+  <div id="rcs-regulatory" class="rcs-page" style="display:none">
+    <div style="display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap">
+      <button class="rcs-tab active" style="font-size:11px;padding:5px 12px" onclick="switchRFSection('sector',this)">🗂 Sector Based</button>
+      <button class="rcs-tab" style="font-size:11px;padding:5px 12px" onclick="switchRFSection('regulation',this)">🏛 Peraturan yang Diacu</button>
+      <button class="rcs-tab" style="font-size:11px;padding:5px 12px" onclick="switchRFSection('updates',this)">🔄 Obligation Updates</button>
+    </div>
+
+    <!-- SECTOR LIST -->
+    <div id="rf-sector-list" class="fade-in">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px">
+        <div class="inindya-search-wrap" style="max-width:320px">
+          <span class="inindya-search-icon">🔍</span>
+          <input class="inindya-search" id="sectorSearch" placeholder="Cari Kode atau Nama Sektor..." oninput="filterSectors()"/>
+        </div>
+        <div class="dropdown">
+          <button class="btn-inindya-primary" onclick="toggleDD('sectorBulkDD')">Bulk Action ▾</button>
+          <div class="dropdown-menu" id="sectorBulkDD">
+            <div class="dropdown-item">Aktifkan</div>
+            <div class="dropdown-item">Inaktifkan</div>
+            <div class="dropdown-item">Konfirmasi Pembaruan</div>
+          </div>
+        </div>
+      </div>
+      <div class="page-info" id="sectorCount" style="margin-bottom:6px;font-size:11px;color:#888"></div>
+      <div class="inindya-table-wrap">
+        <div class="inindya-table-scroll">
+          <table class="inindya-table">
+            <thead><tr>
+              <th>No</th><th>Kode <span class="sort-icon">⇅</span></th><th>Nama Sektor <span class="sort-icon">⇅</span></th>
+              <th>Topik <span class="sort-icon">⇅</span></th><th>Sub-topik <span class="sort-icon">⇅</span></th>
+              <th>Kewajiban <span class="sort-icon">⇅</span></th><th>Kewajiban Aktif</th><th>Pembaruan Terakhir</th>
+            </tr></thead>
+            <tbody id="sectorTbody"></tbody>
+          </table>
+        </div>
+        <div class="pagination-row">
+          <div class="page-size-row">Baris per halaman: <select class="page-size-sel"><option>10</option><option>20</option></select></div>
+          <div class="page-btns"><button class="page-btn active">1</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTOR DETAIL -->
+    <div id="rf-sector-detail" style="display:none" class="fade-in">
+      <div class="breadcrumb" id="sectorDetailBc" style="margin-bottom:10px"></div>
+      <div class="rf-split">
+        <div class="rf-split-left">
+          <input id="sectorDetailName" readonly style="width:100%;border:1px solid #eee;border-radius:6px;padding:6px 10px;font-size:12px;color:#555;background:#f8f8f8;margin-bottom:7px"/>
+          <div class="inindya-search-wrap" style="margin-bottom:8px">
+            <span class="inindya-search-icon">🔍</span>
+            <input class="inindya-search" placeholder="Cari Topik atau Sub-topik..."/>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+            <label style="display:flex;align-items:center;gap:5px;font-size:11px;color:#666;cursor:pointer">
+              <input type="checkbox" style="accent-color:#e05b18"/> Pilih semua untuk diaktifkan
+            </label>
+            <button onclick="collapseAll()" style="background:none;border:none;cursor:pointer;font-size:11px;color:#2B5298;font-weight:600">Tutup Semua</button>
+          </div>
+          <div class="tree-wrap" id="sectorTree"></div>
+        </div>
+        <div class="rf-split-right">
+          <div class="inindya-search-wrap" style="margin-bottom:8px">
+            <span class="inindya-search-icon">🔍</span>
+            <input class="inindya-search" style="font-size:11px" placeholder="Cari Kewajiban..."/>
+          </div>
+          <div class="page-info" style="margin-bottom:6px;font-size:10.5px;color:#888">Baris per halaman:
+            <select class="page-size-sel" style="margin-left:4px;font-size:10.5px"><option>10</option><option>20</option></select>
+          </div>
+          <div class="comp-list-wrap" id="sectorObligations"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REGULATION BASED (Peraturan yang Diacu) -->
+    <div id="rf-regulation" style="display:none" class="fade-in">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px">
+        <div>
+          <div style="font-size:14px;font-weight:700;color:#222;margin-bottom:2px">Peraturan Yang Diacu</div>
+          <div style="font-size:11px;color:#aaa">Hierarki peraturan dasar hukum kewajiban perusahaan</div>
+        </div>
+      </div>
+      <div class="inindya-search-wrap" style="margin-bottom:10px;max-width:360px">
+        <span class="inindya-search-icon">🔍</span>
+        <input class="inindya-search" id="regSearch" placeholder="Cari hierarki peraturan..." oninput="filterRegulations()"/>
+      </div>
+      <div class="page-info" id="regCount" style="margin-bottom:6px;font-size:11px;color:#888"></div>
+      <div class="inindya-table-wrap">
+        <div class="inindya-table-scroll">
+          <table class="inindya-table">
+            <thead><tr>
+              <th>No</th><th>Hierarki Peraturan <span class="sort-icon">⇅</span></th>
+              <th>Peraturan <span class="sort-icon">⇅</span></th><th>Kewajiban <span class="sort-icon">⇅</span></th>
+              <th>Kewajiban Aktif</th><th>Pembaruan Terakhir</th>
+            </tr></thead>
+            <tbody id="regTbody"></tbody>
+          </table>
+        </div>
+        <div class="pagination-row">
+          <div class="page-size-row">Baris per halaman: <select class="page-size-sel"><option>5</option><option>10</option><option>20</option></select></div>
+          <div class="page-btns" id="regPagination"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- OBLIGATION UPDATES -->
+    <div id="rf-updates" style="display:none" class="fade-in">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px">
+        <div>
+          <div style="font-size:14px;font-weight:700;color:#222;margin-bottom:2px">Pembaruan Kewajiban</div>
+          <div style="font-size:11px;color:#aaa">Kewajiban yang baru ditambahkan atau diperbarui</div>
+        </div>
+        <div style="display:flex;gap:6px">
+          <button class="btn-inindya-outline">📅 Pilih Tanggal</button>
+          <button class="btn-inindya-outline">↓</button>
+        </div>
+      </div>
+      <div class="toolbar">
+        <div class="inindya-search-wrap">
+          <span class="inindya-search-icon">🔍</span>
+          <input class="inindya-search" id="updSearch" placeholder="Cari kewajiban..." oninput="filterUpdates()"/>
+        </div>
+        <button class="btn-inindya-outline">⚙ Filter</button>
+        <button class="btn-inindya-primary">Bulk Action ▾</button>
+      </div>
+      <div style="display:flex;align-items:center;gap:5px;margin-bottom:8px">
+        <input type="checkbox" style="accent-color:#e05b18"/>
+        <span style="font-size:11px;color:#666">Pilih semua untuk konfirmasi pembaruan ▾</span>
+        <span id="updCount" style="font-size:10.5px;color:#aaa;margin-left:8px"></span>
+      </div>
+      <div class="inindya-table-wrap" id="updList"></div>
+    </div>
+  </div>
+
+  <!-- ── RCS: ACTIVITY ── -->
+  <div id="rcs-activity" class="rcs-page" style="display:none">
+    <div style="font-size:14px;font-weight:700;color:#222;margin-bottom:4px">Activity Log</div>
+    <div style="font-size:11px;color:#aaa;margin-bottom:16px">Riwayat aktivitas pengelolaan peraturan dan kewajiban compliance</div>
+    <div class="rcs-card" id="activityList"></div>
+  </div>
+
+</div><!-- /rcs-wrap -->
+</div><!-- /page-rcs -->
+
+<!-- Placeholder pages -->
+<div id="page-placeholder" class="fade-in" style="display:none">
+  <div class="page-header">
+    <div class="page-title" id="placeholder-title">Halaman</div>
+    <div class="page-sub" style="margin-bottom:16px">Modul LENS</div>
+  </div>
+  <div style="padding:0 24px">
+    <div class="rcs-card" style="text-align:center;padding:60px">
+      <div style="font-size:40px;margin-bottom:12px">🚧</div>
+      <div style="font-size:14px;font-weight:600;color:#333;margin-bottom:6px">Halaman dalam pengembangan</div>
+      <div style="font-size:12px;color:#aaa">Fitur ini akan segera tersedia</div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /main -->
+</div><!-- /app-body -->
+
+<script>
+// ══════════════════════════ DATA ══════════════════════════
+const REGULATIONS=[
+  {no:1,hierarchy:"Undang-Undang",regulation:39,obligation:1610,active:22,lastUpdate:"02 Agu 2024"},
+  {no:2,hierarchy:"Peraturan Pemerintah Pengganti Undang-Undang (PERPU)",regulation:1,obligation:0,active:0,lastUpdate:"23 Jul 2024"},
+  {no:3,hierarchy:"Peraturan Pemerintah",regulation:45,obligation:827,active:25,lastUpdate:"02 Agu 2024"},
+  {no:4,hierarchy:"Peraturan Presiden",regulation:10,obligation:230,active:0,lastUpdate:"23 Jul 2024"},
+  {no:5,hierarchy:"Keputusan Bersama",regulation:1,obligation:1,active:0,lastUpdate:"23 Jul 2024"},
+  {no:6,hierarchy:"Peraturan Menteri",regulation:86,obligation:1175,active:18,lastUpdate:"02 Agu 2024"},
+  {no:7,hierarchy:"Surat Edaran Menteri",regulation:9,obligation:49,active:0,lastUpdate:"23 Jul 2024"},
+  {no:8,hierarchy:"Keputusan Menteri",regulation:15,obligation:230,active:0,lastUpdate:"23 Jul 2024"},
+  {no:9,hierarchy:"Instruksi Menteri",regulation:1,obligation:2,active:0,lastUpdate:"23 Jul 2024"},
+  {no:10,hierarchy:"Peraturan Lembaga/Badan",regulation:58,obligation:547,active:0,lastUpdate:"23 Jul 2024"},
+  {no:11,hierarchy:"Keputusan Lembaga/Badan",regulation:27,obligation:189,active:0,lastUpdate:"23 Jul 2024"},
+  {no:12,hierarchy:"Surat Edaran Lembaga/Badan",regulation:12,obligation:64,active:0,lastUpdate:"23 Jul 2024"},
+];
+const SECTORS=[
+  {code:"GC",name:"General Corporate",topic:1,subtopic:162,obligation:1167,active:0,lastUpdate:"23 Jul 2024"},
+  {code:"ET",name:"Employment",topic:3,subtopic:353,obligation:2206,active:28,lastUpdate:"23 Jul 2024"},
+  {code:"ITE",name:"Informasi dan Transaksi Elektronik",topic:1,subtopic:85,obligation:538,active:0,lastUpdate:"23 Jul 2024"},
+  {code:"PDP",name:"Pelindungan Data Pribadi",topic:1,subtopic:99,obligation:383,active:0,lastUpdate:"23 Jul 2024"},
+];
+const SECTOR_TREES={
+  PDP:[{code:"PDP.1",name:"Pelindungan Data Pribadi",children:[
+    {code:"PDP.1.AB",name:"Pelindungan Data Pribadi bagi Lembaga Jasa Keuangan (LJK)",children:[
+      {code:"PDP.1.AB.1",name:"Pelaporan dan Permintaan Informasi Debitur Melalui SLIK",count:5}]},
+    {code:"PDP.1.L",name:"Pelindungan Data Pribadi dalam Bidang Administrasi Kependudukan",count:9},
+    {code:"PDP.1.X",name:"Pelindungan Data Pribadi dalam Sektor BUMN",count:1},
+    {code:"PDP.1.M",name:"Pelindungan Data Pribadi dalam Bidang APU PPT dan Anti KKN",children:[
+      {code:"PDP.1.M.1",name:"Penerapan Program Anti Pencucian Uang",count:3}]}]}],
+  GC:[{code:"GC.1",name:"Tata Kelola Perusahaan",children:[
+    {code:"GC.1.A",name:"Organ Perusahaan",count:12},
+    {code:"GC.1.B",name:"Dokumen Perusahaan",count:8}]},
+    {code:"GC.2",name:"Rapat Umum Pemegang Saham",children:[
+    {code:"GC.2.A",name:"RUPS Tahunan",count:6},
+    {code:"GC.2.B",name:"RUPS Luar Biasa",count:4}]}],
+  ET:[{code:"ET.1",name:"Ketenagakerjaan Umum",children:[
+    {code:"ET.1.A",name:"Perjanjian Kerja",count:15},
+    {code:"ET.1.B",name:"Upah dan Tunjangan",count:22}]},
+    {code:"ET.3",name:"Imigrasi dan Tenaga Kerja Asing",children:[
+    {code:"ET.3.A",name:"Pengawasan Keimigrasian",count:18}]}],
+  ITE:[{code:"ITE.1",name:"Transaksi Elektronik",children:[
+    {code:"ITE.1.A",name:"Tanda Tangan Elektronik",count:7},
+    {code:"ITE.1.B",name:"Sertifikat Elektronik",count:5}]}],
+};
+const COMPLIANCE=[
+  {code:"PDP.1.X.1",priority:"Medium",status:"Unassigned",description:"Melindungi dan memastikan keamanan data pribadi yang dikelola BUMN sesuai dengan ketentuan peraturan perundang-undangan yang mengatur mengenai pelindungan data pribadi",pic:"Legal Division",dasar:"UU No. 27 Tahun 2022",topik:"Pelindungan Data Pribadi",subtopik:"Pelindungan Data Pribadi dalam Sektor BUMN"},
+  {code:"ET.3.A.20",priority:"High",status:"Comply",description:"Mengikuti pemeriksaan yang dilakukan oleh Pejabat Imigrasi di Tempat Pemeriksaan Imigrasi bagi Anak Berkewarganegaraan Ganda yang memiliki Paspor Kebangsaan serta fasilitas Keimigrasian yang masuk atau keluar Wilayah Indonesia",pic:"HR & GA Division",dasar:"UU No. 6 Tahun 2011",topik:"Keimigrasian",subtopik:"Pemeriksaan Keimigrasian"},
+  {code:"ET.3.A.7",priority:"High",status:"In Progress",description:"Memastikan pemenuhan persyaratan yang ditetapkan dalam peraturan perundang-undangan untuk Awak Alat Angkut transportasi lainnya yang masuk atau keluar Wilayah Indonesia dengan Alat Angkutnya",pic:"HR & GA Division",dasar:"UU No. 6 Tahun 2011",topik:"Keimigrasian",subtopik:"Pengawasan Keimigrasian"},
+  {code:"ET.3.A.5",priority:"High",status:"In Progress",description:"Memastikan pemenuhan persyaratan yang ditetapkan dalam peraturan perundang-undangan untuk Awak Alat Angkut laut yang masuk atau keluar Wilayah Indonesia dengan Alat Angkutnya",pic:"HR & GA Division",dasar:"UU No. 6 Tahun 2011",topik:"Keimigrasian",subtopik:"Pengawasan Keimigrasian"},
+  {code:"ET.3.A.17",priority:"High",status:"In Progress",description:"Mengajukan permohonan Surat Perjalanan Laksana Paspor untuk Orang Asing yang tidak mempunyai Dokumen Perjalanan yang sah dan negaranya tidak mempunyai perwakilan di Indonesia",pic:"Legal Division",dasar:"UU No. 6 Tahun 2011",topik:"Keimigrasian",subtopik:"Dokumen Perjalanan"},
+  {code:"GC.1.A.3",priority:"Low",status:"Comply",description:"Memastikan seluruh dokumen perusahaan tersimpan dengan baik dan dapat diakses sesuai ketentuan tata kelola dokumen yang berlaku di PT Nindya Karya",pic:"Corporate Secretary",dasar:"UU No. 40 Tahun 2007",topik:"Tata Kelola Perusahaan",subtopik:"Dokumen Perusahaan"},
+  {code:"GC.2.B.1",priority:"Medium",status:"In Progress",description:"Melaksanakan RUPS Tahunan sesuai ketentuan Undang-Undang Perseroan Terbatas dan Anggaran Dasar Perusahaan dalam jangka waktu yang telah ditetapkan",pic:"Corporate Secretary",dasar:"UU No. 40 Tahun 2007",topik:"Tata Kelola Perusahaan",subtopik:"RUPS"},
+  {code:"ITE.1.A.2",priority:"Medium",status:"Unassigned",description:"Memastikan penggunaan tanda tangan elektronik dalam setiap transaksi elektronik perusahaan telah memenuhi persyaratan yang ditetapkan dalam peraturan perundang-undangan",pic:"ICT Division",dasar:"UU No. 11 Tahun 2008",topik:"Transaksi Elektronik",subtopik:"Tanda Tangan Elektronik"},
+  {code:"ET.1.B.4",priority:"Low",status:"Comply",description:"Memastikan pembayaran upah minimum kepada seluruh karyawan sesuai dengan Upah Minimum Provinsi/Kabupaten/Kota yang berlaku",pic:"HR & GA Division",dasar:"UU No. 13 Tahun 2003",topik:"Ketenagakerjaan",subtopik:"Upah dan Kesejahteraan"},
+  {code:"GC.1.B.2",priority:"Medium",status:"In Progress",description:"Menyusun dan memelihara daftar pemegang saham serta buku daftar pemegang obligasi sesuai ketentuan yang berlaku",pic:"Corporate Secretary",dasar:"UU No. 40 Tahun 2007",topik:"Tata Kelola Perusahaan",subtopik:"Saham"},
+];
+const UPDATES=[
+  {code:"PDP.1.X.1",tags:["New","Active"],description:"Melindungi dan memastikan keamanan data pribadi yang dikelola BUMN sesuai dengan ketentuan peraturan perundang-undangan yang mengatur mengenai pelindungan data pribadi"},
+  {code:"ET.3.A.15",tags:["New","Version 4"],description:"Memenuhi kewajiban yang telah ditetapkan dalam peraturan perundang-undangan bagi Penanggung Jawab Alat Angkut yang datang dari luar Wilayah Indonesia atau akan berangkat keluar Wilayah Indonesia"},
+  {code:"ET.3.A.18",tags:["New","Active","Version 3"],description:"Mengikuti pemeriksaan yang dilakukan oleh Pejabat Imigrasi di Tempat Pemeriksaan Imigrasi bagi Orang Asing yang keluar Wilayah Indonesia"},
+  {code:"ET.3.A.4",tags:["New","Active","Version 3"],description:"Mendapat Tanda Keluar dari Pejabat Imigrasi untuk setiap orang dapat keluar Wilayah Indonesia setelah memenuhi persyaratan"},
+  {code:"ET.3.A.3",tags:["New","Active","Version 3"],description:"Mendapatkan tanda masuk bagi Orang Asing yang telah memenuhi persyaratan dapat masuk wilayah Indonesia"},
+  {code:"ET.3.A.11",tags:["New","Active","Version 4"],description:"Mengikuti pemeriksaan yang dilakukan oleh Pejabat Imigrasi di Tempat Pemeriksaan Imigrasi bagi Orang Asing yang masuk Wilayah Indonesia"},
+  {code:"ET.3.A.2",tags:["New","Active","Version 4"],description:"Memastikan setiap Orang Asing yang masuk Wilayah Indonesia memiliki dokumen perjalanan yang sah dan tidak kedaluwarsa"},
+  {code:"GC.1.A.5",tags:["New","Version 2"],description:"Memastikan Direksi dan Dewan Komisaris memenuhi persyaratan integritas dan kompetensi sesuai ketentuan yang berlaku"},
+];
+const ACTIVITIES=[
+  {user:"HL",name:"Hendra Laksono",action:"menambahkan peraturan baru",target:"Permen PUPR No. 1/2026",time:"2 jam lalu",color:"#1B3A6B"},
+  {user:"CS",name:"Corporate Secretary",action:"mengubah status kewajiban",target:"ET.3.A.20 → Comply",time:"4 jam lalu",color:"#5B2D8E"},
+  {user:"HL",name:"Hendra Laksono",action:"mengunggah dokumen checklist untuk",target:"PDP.1.X.1",time:"kemarin 15:42",color:"#1B3A6B"},
+  {user:"IT",name:"ICT Division",action:"mengaktifkan kewajiban",target:"GC.2.B.1",time:"2 hari lalu",color:"#00695C"},
+  {user:"GA",name:"HR & GA Division",action:"menambahkan komentar pada",target:"ET.3.A.7",time:"3 hari lalu",color:"#2E7D32"},
+  {user:"LD",name:"Legal Division",action:"memperbarui dasar hukum",target:"ITE.1.A.2",time:"4 hari lalu",color:"#e05b18"},
+  {user:"CS",name:"Corporate Secretary",action:"mengajukan permohonan review untuk",target:"GC.1.B.2",time:"5 hari lalu",color:"#5B2D8E"},
+];
+const PIE_DATA=[
+  {name:"Prohibition",value:485,color:"#F57F17"},
+  {name:"Continuous",value:2563,color:"#5B2D8E"},
+  {name:"Conditional",value:1262,color:"#1B3A6B"},
+  {name:"Licensing",value:832,color:"#1565C0"},
+  {name:"Periodic",value:145,color:"#e05b18"},
+];
+const KEPATUHAN_DATA=[
+  {dasar:"Jadwal pengisian Data Demografi tahun 2026 period...",dilaporkan:"PT Danareksa (Persero)",unit:"DIVISI HUMAN CAPITAL",jenis:"Bulanan",status:"Comply",creator:"YUDI JUANDA",tanggal:"17-06-2026 16:15"},
+  {dasar:"Pembayaran BPJS Kesehatan Karyawan Periode Mei 20...",dilaporkan:"BPJS Kesehatan",unit:"DIVISI HUMAN CAPITAL",jenis:"Bulanan",status:"Comply",creator:"YUDI JUANDA",tanggal:"17-06-2026 16:15"},
+  {dasar:"Pembayaran BPJS Ketenagakerjaan Karyawan Periode...",dilaporkan:"BPJS Ketenagakerjaan",unit:"DIVISI HUMAN CAPITAL",jenis:"Bulanan",status:"Comply",creator:"YUDI JUANDA",tanggal:"17-06-2026 16:13"},
+  {dasar:"PER-2/MBU/03/2023 Tahun 2023",dilaporkan:"Kepala Badan Pengaturan Badan Usaha Milik Negara...",unit:"DIVISI PERENCANAAN STRATEGIS & INVESTASI",jenis:"Tahunan",status:"Comply",creator:"FAJRINA RIZKA AWALIA",tanggal:"10-06-2026 14:59"},
+  {dasar:"PER-2/MBU/03/2023 Tahun 2023",dilaporkan:"Kepala Badan Pengaturan Badan Usaha Milik Negara...",unit:"DIVISI PERENCANAAN STRATEGIS & INVESTASI",jenis:"Triwulan",status:"Comply",creator:"FAJRINA RIZKA AWALIA",tanggal:"10-06-2026 14:52"},
+  {dasar:"Laporan Keuangan dan Consolpack 2026",dilaporkan:"PT Danareksa (Persero)",unit:"DIVISI AKUNTANSI & PERPAJAKAN",jenis:"Bulanan",status:"Comply",creator:"DHOMAS SETIA PRAMUDHITA",tanggal:"02-06-2026 16:02"},
+  {dasar:"Surat Danareksa kepada Anggota Holding nomor S-18...",dilaporkan:"PT Danareksa",unit:"DIVISI MANAJEMEN RISIKO, SISTEM & ESG",jenis:"Bulanan",status:"Comply",creator:"NICKO FARHAN DEWANGGA",tanggal:"02-06-2026 14:46"},
+  {dasar:"Surat Danareksa kepada Anggota Holding nomor S-18...",dilaporkan:"PT Danareksa",unit:"DIVISI MANAJEMEN RISIKO, SISTEM & ESG",jenis:"Triwulan",status:"Comply",creator:"NICKO FARHAN DEWANGGA",tanggal:"02-06-2026 14:44"},
+  {dasar:"Laporan CFO Meeting",dilaporkan:"PT Danareksa (Persero)",unit:"DIVISI AKUNTANSI & PERPAJAKAN",jenis:"Bulanan",status:"Comply",creator:"DHOMAS SETIA PRAMUDHITA",tanggal:"02-06-2026 14:40"},
+  {dasar:"Laporan Dashboard Danareksa 2026",dilaporkan:"PT Danareksa (Persero)",unit:"DIVISI AKUNTANSI & PERPAJAKAN",jenis:"Bulanan",status:"Comply",creator:"DHOMAS SETIA PRAMUDHITA",tanggal:"02-06-2026 14:30"},
+];
+
+// ══════════════════════════ STATE ══════════════════════════
+let isRegView=false, selectedCompliance=null, currentDetTab='Information';
+let expandedNodes={}, regPage=1, filteredRegs=REGULATIONS;
+const REG_ROWS=5;
+let currentPage='rcs';
+let sidebarOpen=true;
+
+// ══════════════════════════ SIDEBAR & NAV ══════════════════════════
+function toggleSidebar(){
+  sidebarOpen=!sidebarOpen;
+  const sb=document.getElementById('sidebar');
+  const mn=document.getElementById('main');
+  if(sidebarOpen){sb.style.width='155px';mn.style.marginLeft='155px';}
+  else{sb.style.width='0';mn.style.marginLeft='0';}
+}
+let lensOpen=true;
+function toggleLENS(el){
+  lensOpen=!lensOpen;
+  const menu=document.getElementById('lens-submenu');
+  const chevron=document.getElementById('lens-chevron');
+  menu.style.display=lensOpen?'':'none';
+  chevron.textContent=lensOpen?'∧':'∨';
+}
+function toggleGroup(id,el){/* placeholder */ }
+
+function navTo(page,clickedEl){
+  // Update sidebar active states
+  document.querySelectorAll('.sidebar-sub-item').forEach(i=>i.classList.remove('active'));
+  document.querySelectorAll('.sidebar-item').forEach(i=>i.classList.remove('active'));
+  if(clickedEl){clickedEl.classList.add('active');}
+
+  // Hide all pages
+  document.getElementById('page-dashboard').style.display='none';
+  document.getElementById('page-kepatuhan').style.display='none';
+  document.getElementById('page-rcs').style.display='none';
+  document.getElementById('page-placeholder').style.display='none';
+
+  if(page==='dashboard'){
+    document.getElementById('page-dashboard').style.display='';
+    document.querySelector('.sidebar-item').classList.add('active');
+  } else if(page==='rcs-home'){
+    document.getElementById('page-rcs').style.display='';
+    switchRCSTab('home',document.querySelectorAll('.rcs-tab')[0]);
+  } else if(page==='kepatuhan'){
+    document.getElementById('page-kepatuhan').style.display='';
+  } else {
+    document.getElementById('placeholder-title').textContent=page.replace(/-/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
+    document.getElementById('page-placeholder').style.display='';
+  }
+  closeAllDD();
+}
+
+// ══════════════════════════ RCS TABS ══════════════════════════
+function switchRCSTab(tab, btn){
+  document.querySelectorAll('#page-rcs .rcs-tab').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  document.querySelectorAll('.rcs-page').forEach(p=>p.style.display='none');
+  const map={home:'rcs-home',compliance:'rcs-compliance',regulatory:'rcs-regulatory',activity:'rcs-activity'};
+  const el=document.getElementById(map[tab]);
+  if(el){el.style.display='';el.classList.add('active');}
+  // Update breadcrumb
+  const titles={home:'Peraturan yang Diacu — Dashboard',compliance:'Compliance Monitor',regulatory:'Regulatory Framework',activity:'Activity Log'};
+  document.getElementById('rcs-breadcrumb-cur').textContent=titles[tab]||'';
+  document.getElementById('rcs-page-title').textContent='Compliance — '+(titles[tab]||'Peraturan yang Diacu');
+}
+
+function switchHomeTab(tab,btn){
+  const parentTabs=btn.parentElement.querySelectorAll('.rcs-tab');
+  parentTabs.forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('rcs-home-monitor').style.display=tab==='monitor'?'':'none';
+  document.getElementById('rcs-home-framework').style.display=tab==='framework'?'':'none';
+}
+
+// ══════════════════════════ DROPDOWN ══════════════════════════
+function toggleDD(id){
+  const el=document.getElementById(id);
+  const wasOpen=el.classList.contains('open');
+  closeAllDD();
+  if(!wasOpen) el.classList.add('open');
+}
+function closeAllDD(){document.querySelectorAll('.dropdown-menu').forEach(d=>d.classList.remove('open'));}
+document.addEventListener('click',e=>{if(!e.target.closest('.dropdown'))closeAllDD();});
+
+// ══════════════════════════ VIEW TOGGLE ══════════════════════════
+function toggleView(){ setView(isRegView?'obligation':'regulation'); }
+
+// ══════════════════════════ BADGES ══════════════════════════
+function statusBadge(s){const m={Comply:'comply','In Progress':'progress',Unassigned:'unassigned'};return`<span class="badge badge-${m[s]||'unassigned'}">${s}</span>`;}
+function priorityBadge(p){const m={High:{cls:'high',p:'P1'},Medium:{cls:'medium',p:'P2'},Low:{cls:'low',p:'P3'}};const x=m[p]||m.Low;return`<span class="badge badge-${x.cls}">${x.p} ${p}</span>`;}
+function tagBadge(t){if(t==='New')return`<span class="tag-new">${t}</span>`;if(t==='Active')return`<span class="tag-active">${t}</span>`;return`<span class="tag-version">${t}</span>`;}
+
+// ══════════════════════════ DONUT ══════════════════════════
+function donutSVG(rate,color,size=80){
+  const r=32,circ=2*Math.PI*r,fill=circ*rate/100,empty=circ*(1-rate/100);
+  return`<div class="donut-wrap" style="width:${size}px;height:${size}px;flex-shrink:0">
+    <svg viewBox="0 0 80 80" width="${size}" height="${size}" style="transform:rotate(-90deg)">
+      <circle cx="40" cy="40" r="${r}" fill="none" stroke="#eee" stroke-width="9"/>
+      <circle cx="40" cy="40" r="${r}" fill="none" stroke="${color}" stroke-width="9"
+        stroke-dasharray="${fill} ${empty}" stroke-linecap="round"/>
+    </svg>
+    <div class="donut-center"><span class="donut-pct">${rate}%</span><span class="donut-txt">Comply</span></div>
+  </div>`;}
+
+// ══════════════════════════ MONITOR CARDS ══════════════════════════
+// ══════════════════ VIEW SWITCH (pill) ══════════════════
+function setView(mode){
+  isRegView=(mode==='regulation');
+  document.getElementById('pillObl').classList.toggle('active',!isRegView);
+  document.getElementById('pillReg').classList.toggle('active',isRegView);
+  renderDashboard();
+}
+
+// ══════════════════ FULL DASHBOARD RENDER ══════════════════
+function renderDashboard(){
+  const rate=isRegView?53:70, comply=isRegView?28:26, total=isRegView?53:37, inProg=isRegView?25:11;
+  const label=isRegView?'Regulation':'Group';
+
+  // KPI Strip
+  const kpis=[
+    {icon:'✅',bg:'#E8F5E9',iconBg:'#2E7D32',val:comply,lbl:'Comply',delta:'+3 dari bulan lalu',dc:'#2E7D32'},
+    {icon:'⏳',bg:'#FFF8E1',iconBg:'#F57F17',val:inProg,lbl:'In Progress',delta:'−2 dari bulan lalu',dc:'#F57F17'},
+    {icon:'⚠',bg:'#FFF3E0',iconBg:'#e05b18',val:total-comply-inProg,lbl:'Unassigned',delta:'Perlu ditugaskan',dc:'#e05b18'},
+    {icon:'📋',bg:'#E3F2FD',iconBg:'#1565C0',val:total,lbl:'Total Kewajiban',delta:'Periode berjalan',dc:'#1565C0'},
+  ];
+  document.getElementById('kpiStrip').innerHTML=kpis.map(k=>`
+    <div class="kpi-chip" style="border-top:3px solid ${k.iconBg}">
+      <div class="kpi-chip-icon" style="background:${k.bg}">${k.icon}</div>
+      <div>
+        <div class="kpi-chip-val">${k.val}</div>
+        <div class="kpi-chip-lbl">${k.lbl}</div>
+        <div class="kpi-chip-delta" style="color:${k.dc}">${k.delta}</div>
+      </div>
+    </div>`).join('');
+
+  // Big donut
+  renderBigDonut(rate);
+  document.getElementById('bigDonutPct').textContent=rate+'%';
+  document.getElementById('overallPctLabel').textContent=rate+'%';
+  document.getElementById('overallBar').style.width=rate+'%';
+  document.getElementById('rateSubLabel').textContent=`${comply} dari ${total} Comply ${isRegView?'Regulations':'Obligations'}`;
+  document.getElementById('ctaText').innerHTML=`Perusahaan telah mematuhi <strong>${comply}</strong> dari <strong>${total}</strong> kewajiban`;
+
+  // Priority bars
+  const pBars=isRegView
+    ?[{n:"Total Comply",v:comply,max:total,c:"#2E7D32"}]
+    :[{n:"High",v:4,max:10,c:"#C62828"},{n:"Medium",v:18,max:26,c:"#F57F17"},{n:"Low",v:4,max:8,c:"#1565C0"}];
+  document.getElementById('priorityBars').innerHTML=pBars.map(b=>`
+    <div class="bar-mini-row" style="margin-bottom:8px">
+      <span class="bar-mini-name" style="width:52px;font-size:10px">${b.n}</span>
+      <div class="bar-mini-track" style="height:7px">
+        <div class="bar-mini-fill" style="width:${(b.v/b.max)*100}%;background:${b.c};height:100%;border-radius:10px;transition:width .7s ease"></div>
+      </div>
+      <span class="bar-mini-val" style="font-size:10px;width:18px">${b.v}</span>
+    </div>`).join('');
+
+  // Group lists (comply)
+  const gc=isRegView
+    ?[{g:"UU No. 28/1999",v:1,max:6},{g:"UU No. 31/1999",v:1,max:6},{g:"Permen No. 2/2004",v:1,max:6},{g:"UU No. 40/2007",v:1,max:6},{g:"UU No. 11/2008",v:5,max:6}]
+    :[{g:"Compliance Division",v:3,max:10},{g:"Corporate Secretary",v:3,max:10},{g:"HR & GA Division",v:4,max:10},{g:"ICT Division",v:5,max:10},{g:"Legal Division",v:10,max:10},{g:"Operation",v:1,max:10}];
+  document.getElementById('complyGroupTitle').textContent=`Obligation Comply by ${label}`;
+  document.getElementById('complyCount').textContent=comply;
+  document.getElementById('complyGroupList').innerHTML=gc.map(({g,v,max})=>`
+    <div class="group-row-rich">
+      <span style="font-size:10.5px;color:#444;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding-right:8px">${g}</span>
+      <div class="group-row-bar"><div class="group-row-bar-fill" style="width:${(v/max)*100}%;background:#2E7D32"></div></div>
+      <span style="font-size:10.5px;font-weight:700;color:#2E7D32;width:20px;text-align:right;flex-shrink:0">${v}</span>
+    </div>`).join('');
+
+  // Group lists (in progress)
+  const gp=isRegView
+    ?[{g:"UU No. 28/1999",v:0,max:5},{g:"UU No. 40/2007",v:4,max:5},{g:"UU No. 11/2008",v:1,max:5}]
+    :[{g:"Compliance Division",v:5,max:6},{g:"Corporate Secretary",v:0,max:6},{g:"HR & GA Division",v:0,max:6},{g:"Legal Division",v:6,max:6}];
+  document.getElementById('progressGroupTitle').textContent=`In Progress by ${label}`;
+  document.getElementById('progressCount').textContent=inProg;
+  document.getElementById('progressGroupList').innerHTML=gp.map(({g,v,max})=>`
+    <div class="group-row-rich">
+      <span style="font-size:10.5px;color:#444;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding-right:8px">${g}</span>
+      <div class="group-row-bar"><div class="group-row-bar-fill" style="width:${(v/Math.max(max,1))*100}%;background:#F57F17"></div></div>
+      <span style="font-size:10.5px;font-weight:700;color:#F57F17;width:20px;text-align:right;flex-shrink:0">${v}</span>
+    </div>`).join('');
+
+  // Attention list
+  const attn=COMPLIANCE.filter(c=>c.status==='In Progress'||c.status==='Unassigned').slice(0,5);
+  document.getElementById('attentionList').innerHTML=attn.map(c=>`
+    <div class="attention-item" onclick="switchRCSTab('compliance',document.querySelectorAll('.rcs-tab')[1]);setTimeout(()=>selectCompliance('${c.code}'),100)">
+      <div class="attention-dot" style="background:${c.status==='In Progress'?'#F57F17':'#e05b18'}"></div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:10.5px;font-weight:700;color:#1B3A6B">${c.code}</div>
+        <div style="font-size:10px;color:#888;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${c.description.substring(0,60)}...</div>
+      </div>
+      <span style="flex-shrink:0">${statusBadge(c.status)}</span>
+    </div>`).join('');
+
+  // Trend chart
+  renderTrend();
+
+  // Sector coverage
+  const sc=[{n:"GC",full:"General Corporate",pct:82,c:"#1B3A6B"},{n:"ET",full:"Employment",pct:68,c:"#e05b18"},{n:"ITE",full:"Info & Transaksi Elektronik",pct:45,c:"#5B2D8E"},{n:"PDP",full:"Pelindungan Data Pribadi",pct:30,c:"#2E7D32"}];
+  document.getElementById('sectorCoverage').innerHTML=sc.map(s=>`
+    <div style="margin-bottom:10px">
+      <div style="display:flex;justify-content:space-between;margin-bottom:3px">
+        <span style="font-size:10.5px;font-weight:600;color:#333">${s.n} — ${s.full}</span>
+        <span style="font-size:10.5px;font-weight:700;color:${s.c}">${s.pct}%</span>
+      </div>
+      <div style="background:#f0f0f0;border-radius:10px;height:7px;overflow:hidden">
+        <div style="width:${s.pct}%;height:100%;background:${s.c};border-radius:10px;transition:width .7s ease"></div>
+      </div>
+    </div>`).join('');
+}
+
+function renderBigDonut(rate){
+  const cx=70,cy=70,r=54,ri=34,circ=2*Math.PI*r;
+  const fill=circ*rate/100,empty=circ*(1-rate/100);
+  // Background track
+  const bg=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#f0f0f0" stroke-width="12"/>`;
+  // Colored arc
+  const arc=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="url(#donutGrad)" stroke-width="12"
+    stroke-dasharray="${fill} ${empty}" stroke-linecap="round" transform="rotate(-90 ${cx} ${cy})"
+    style="transition:stroke-dasharray .8s ease"/>`;
+  const grad=`<defs><linearGradient id="donutGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%" stop-color="#1B3A6B"/><stop offset="100%" stop-color="#2B5298"/></linearGradient></defs>`;
+  document.getElementById('bigDonutSvg').innerHTML=grad+bg+arc;
+}
+
+function renderTrend(){
+  const data=isRegView?[48,52,53,50,55,53]:[58,62,65,68,66,70];
+  const w=260,h=90,pad=8;
+  const min=Math.min(...data)-5,max=Math.max(...data)+5;
+  const px=(i)=>pad+i*(w-2*pad)/(data.length-1);
+  const py=(v)=>h-pad-(v-min)/(max-min)*(h-2*pad);
+  // Area fill
+  let area=`M${px(0)},${py(data[0])}`;
+  data.forEach((v,i)=>{if(i>0)area+=` L${px(i)},${py(v)}`;});
+  area+=` L${px(data.length-1)},${h} L${px(0)},${h} Z`;
+  // Line
+  let line=`M${px(0)},${py(data[0])}`;
+  data.forEach((v,i)=>{if(i>0)line+=` L${px(i)},${py(v)}`;});
+  // Dots
+  const dots=data.map((v,i)=>`<circle cx="${px(i)}" cy="${py(v)}" r="3" fill="#1B3A6B" stroke="#fff" stroke-width="1.5"/>`).join('');
+  document.getElementById('trendSvg').innerHTML=`
+    <defs><linearGradient id="trendGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1B3A6B" stop-opacity=".15"/>
+      <stop offset="100%" stop-color="#1B3A6B" stop-opacity="0"/>
+    </linearGradient></defs>
+    <path d="${area}" fill="url(#trendGrad)"/>
+    <path d="${line}" fill="none" stroke="#1B3A6B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    ${dots}`;
+}
+
+// ══════════════════════════ PIE CHART ══════════════════════════
+function renderPieChart(){
+  const total=PIE_DATA.reduce((s,d)=>s+d.value,0);
+  const cx=75,cy=75,r=62,ri=36;let start=-Math.PI/2,paths='',leg='';
+  let activeIdx=null;
+  PIE_DATA.forEach((d,idx)=>{
+    const a=(d.value/total)*2*Math.PI,end=start+a;
+    const x1=cx+r*Math.cos(start),y1=cy+r*Math.sin(start),x2=cx+r*Math.cos(end),y2=cy+r*Math.sin(end);
+    const xi1=cx+ri*Math.cos(start),yi1=cy+ri*Math.sin(start),xi2=cx+ri*Math.cos(end),yi2=cy+ri*Math.sin(end);
+    const lg=a>Math.PI?1:0;
+    paths+=`<path d="M${xi1},${yi1}L${x1},${y1}A${r},${r} 0 ${lg} 1 ${x2},${y2}L${xi2},${yi2}A${ri},${ri} 0 ${lg} 0 ${xi1},${yi1}" fill="${d.color}" style="cursor:pointer;transition:opacity .2s" onmouseenter="this.style.opacity='.75'" onmouseleave="this.style.opacity='1'"><title>${d.name}: ${d.value.toLocaleString('id-ID')}</title></path>`;
+    const pct=Math.round(d.value/total*100);
+    leg+=`<div class="pie-legend-item" style="cursor:pointer" onmouseenter="this.style.opacity='.7'" onmouseleave="this.style.opacity='1'">
+      <div class="pie-dot" style="background:${d.color}"></div>
+      <span class="pie-lbl">${d.name}: <strong>${d.value.toLocaleString('id-ID')}</strong> <span style="color:#aaa">(${pct}%)</span></span></div>`;
+    start=end;
+  });
+  document.getElementById('pieSvg').innerHTML=paths;
+  document.getElementById('pieLegend').innerHTML=leg;
+
+  // RF sector breakdown
+  document.getElementById('rfSectorBreakdown').innerHTML=SECTORS.map(s=>{
+    const maxObl=Math.max(...SECTORS.map(x=>x.obligation));
+    const colors={GC:'#1B3A6B',ET:'#e05b18',ITE:'#5B2D8E',PDP:'#2E7D32'};
+    return`<div class="sector-bar-row">
+      <div class="sector-bar-header">
+        <span class="sector-bar-name">${s.code} — ${s.name}</span>
+        <span class="sector-bar-meta">${s.obligation.toLocaleString('id-ID')} kewajiban</span>
+      </div>
+      <div class="sector-bar-track" onclick="switchRFSection('sector',document.querySelectorAll('#rcs-regulatory .rcs-tab')[0]);switchRCSTab('regulatory',document.querySelectorAll('.rcs-tab')[2])">
+        <div class="sector-bar-fill" style="width:${(s.obligation/maxObl)*100}%;background:${colors[s.code]||'#1B3A6B'}"></div>
+      </div>
+    </div>`;}).join('');
+
+  // Hierarchy bars
+  const topRegs=REGULATIONS.sort((a,b)=>b.obligation-a.obligation).slice(0,6);
+  const maxR=topRegs[0].obligation;
+  document.getElementById('rfHierarchyBars').innerHTML=topRegs.map((r,i)=>`
+    <div class="hier-bar-row">
+      <span class="hier-bar-name">${r.hierarchy}</span>
+      <div class="hier-bar-track"><div class="hier-bar-fill" style="width:${(r.obligation/maxR)*100}%"></div></div>
+      <span class="hier-bar-val">${r.obligation.toLocaleString('id-ID')}</span>
+    </div>`).join('');
+}
+
+// legacy — keep for compat
+function renderMonitorCards(){ renderDashboard(); }
+
+// ══════════════════════════ COMPLIANCE ══════════════════════════
+function renderCompliance(data){
+  const list=document.getElementById('compList');
+  document.getElementById('compCount').textContent=`Menampilkan ${data.length} dari ${COMPLIANCE.length} data`;
+  if(!data.length){list.innerHTML='<div class="empty-state"><div class="empty-icon">🔍</div>Tidak ada kewajiban yang sesuai.</div>';return;}
+  list.innerHTML=data.map(item=>`
+    <div class="comp-item${selectedCompliance&&selectedCompliance.code===item.code?' selected':''}" onclick="selectCompliance('${item.code}')">
+      <div class="comp-badges-row">
+        <input type="checkbox" style="accent-color:#e05b18" onclick="event.stopPropagation()"/>
+        <span class="comp-code">${item.code}</span>${priorityBadge(item.priority)}${statusBadge(item.status)}
+      </div>
+      <div class="comp-desc">${item.description}</div>
+    </div>`).join('');
+}
+function filterCompliance(){
+  const q=document.getElementById('compSearch').value.toLowerCase();
+  renderCompliance(COMPLIANCE.filter(c=>c.code.toLowerCase().includes(q)||c.description.toLowerCase().includes(q)));
+}
+function selectCompliance(code){
+  selectedCompliance=COMPLIANCE.find(c=>c.code===code);
+  document.getElementById('detailPanel').classList.remove('hidden');
+  renderDetailPanel();filterCompliance();
+}
+function renderDetailPanel(){
+  if(!selectedCompliance)return;
+  const c=selectedCompliance;
+  document.getElementById('detailBadges').innerHTML=`<span class="comp-code">${c.code}</span>${priorityBadge(c.priority)}${statusBadge(c.status)}`;
+  document.getElementById('detailTitle').textContent=c.description;
+  switchDetTab(currentDetTab,null);
+}
+function switchDetTab(tab,btn){
+  currentDetTab=tab;
+  document.querySelectorAll('.det-tab').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  else document.querySelectorAll('.det-tab').forEach(b=>{if(b.textContent.trim()===tab||b.textContent.replace(/&.*/,'').trim()===tab)b.classList.add('active');});
+  const c=selectedCompliance,content=document.getElementById('detailTabContent');
+  if(tab==='Information'){
+    content.innerHTML=[{l:'Topik',v:c.topik},{l:'Sub-topik',v:c.subtopik},{l:'Prioritas',v:c.priority},{l:'PIC',v:c.pic},{l:'Status Proses',v:c.status},{l:'Dasar Hukum',v:c.dasar}]
+      .map(({l,v})=>`<div class="info-field"><div class="info-field-lbl">${l}</div><div class="info-field-val">${v}</div></div>`).join('');
+  } else if(tab==='Regulation'){
+    content.innerHTML=`<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f5f5f5;margin-bottom:10px">
+      <span style="font-size:12px;color:#2B5298;font-weight:600">∧ ${c.dasar}</span>
+      <span style="font-size:11px;color:#2B5298;cursor:pointer">Lihat ›</span></div>
+      <div style="display:flex;gap:6px;margin-bottom:10px">
+        <button class="btn-sm-inindya">Pasal Kewajiban</button>
+        <button class="btn-sm-inindya">Pasal Sanksi</button>
+      </div>
+      <div style="font-size:12px;font-weight:700;color:#222;margin-bottom:6px">Kewajiban Pasal 1</div>
+      <div style="font-size:11px;color:#555;line-height:1.6">Dalam peraturan ini yang dimaksud dengan kewajiban adalah segala sesuatu yang harus dilakukan atau tidak dilakukan oleh subjek hukum sesuai dengan ketentuan peraturan perundang-undangan yang berlaku di wilayah Republik Indonesia.</div>`;
+  } else {
+    content.innerHTML='<div class="empty-state"><div class="empty-icon">📋</div>Tidak ada data untuk ditampilkan.</div>';
+  }
+}
+
+// ══════════════════════════ RF SECTIONS ══════════════════════════
+function switchRFSection(section,btn){
+  const parentTabs=btn.parentElement.querySelectorAll('.rcs-tab');
+  parentTabs.forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  ['rf-sector-list','rf-sector-detail','rf-regulation','rf-updates'].forEach(id=>{
+    const el=document.getElementById(id);if(el)el.style.display='none';
+  });
+  if(section==='sector')document.getElementById('rf-sector-list').style.display='';
+  if(section==='regulation')document.getElementById('rf-regulation').style.display='';
+  if(section==='updates')document.getElementById('rf-updates').style.display='';
+}
+
+// SECTORS TABLE
+function renderSectors(data){
+  document.getElementById('sectorCount').textContent=`${data.length} dari ${SECTORS.length} data ditampilkan`;
+  document.getElementById('sectorTbody').innerHTML=data.map((r,i)=>`
+    <tr onclick="openSectorDetail('${r.code}')">
+      <td>${i+1}</td><td class="tbl-bold">${r.code}</td><td>${r.name}</td>
+      <td>${r.topic}</td><td>${r.subtopic}</td>
+      <td class="tbl-bold">${r.obligation.toLocaleString('id-ID')}</td>
+      <td class="${r.active>0?'tbl-green':'tbl-gray'}">${r.active}</td>
+      <td style="color:#888">${r.lastUpdate}</td>
+    </tr>`).join('');
+}
+function filterSectors(){
+  const q=document.getElementById('sectorSearch').value.toLowerCase();
+  renderSectors(SECTORS.filter(s=>s.code.toLowerCase().includes(q)||s.name.toLowerCase().includes(q)));
+}
+function openSectorDetail(code){
+  const sector=SECTORS.find(s=>s.code===code);
+  document.getElementById('rf-sector-list').style.display='none';
+  document.getElementById('rf-sector-detail').style.display='';
+  document.getElementById('sectorDetailName').value=sector.name;
+  document.getElementById('sectorDetailBc').innerHTML=`
+    <span>🗂</span><span class="sep">›</span>
+    <a class="breadcrumb-link" onclick="closeSectorDetail()">Sector Based</a>
+    <span class="sep">›</span><span class="cur">${sector.name}</span>`;
+  expandedNodes={};
+  renderTree(code);renderSectorObligations();
+}
+function closeSectorDetail(){
+  document.getElementById('rf-sector-detail').style.display='none';
+  document.getElementById('rf-sector-list').style.display='';
+}
+function renderTree(code){
+  const tree=SECTOR_TREES[code]||[];
+  document.getElementById('sectorTree').innerHTML=buildTreeHTML(tree,0);
+}
+function buildTreeHTML(nodes,depth){
+  return nodes.map(node=>{
+    const hasC=node.children&&node.children.length>0,exp=expandedNodes[node.code];
+    const pad=12+depth*16;
+    return`<div>
+      <div class="tree-node" style="padding-left:${pad}px" onclick="${hasC?`toggleTreeNode('${node.code}')`:``}">
+        <input type="checkbox" style="accent-color:#e05b18;flex-shrink:0" onclick="event.stopPropagation()"/>
+        <span class="tree-toggle">${hasC?(exp?'▾':'▸'):''}</span>
+        <span class="tree-code">${node.code}</span>
+        <span class="tree-name">${node.name}</span>
+        ${node.count!==undefined?`<span class="tree-count">${node.count}</span>`:'<span class="tree-count">-</span>'}
+      </div>
+      ${hasC&&exp?buildTreeHTML(node.children,depth+1):''}
+    </div>`;
+  }).join('');
+}
+function toggleTreeNode(code){
+  expandedNodes[code]=!expandedNodes[code];
+  const n=document.getElementById('sectorDetailName').value;
+  const s=SECTORS.find(x=>x.name===n);if(s)renderTree(s.code);
+}
+function collapseAll(){
+  expandedNodes={};
+  const n=document.getElementById('sectorDetailName').value;
+  const s=SECTORS.find(x=>x.name===n);if(s)renderTree(s.code);
+}
+function renderSectorObligations(){
+  document.getElementById('sectorObligations').innerHTML=COMPLIANCE.slice(0,5).map(item=>`
+    <div class="comp-item">
+      <div class="comp-badges-row">
+        <input type="checkbox" style="accent-color:#e05b18"/>
+        <span class="comp-code">${item.code}</span><span class="tag-new">New</span>
+      </div>
+      <div class="comp-desc">${item.description.substring(0,80)}...</div>
+    </div>`).join('');
+}
+
+// REGULATIONS TABLE
+function renderRegulations(data){
+  filteredRegs=data;
+  const start=(regPage-1)*REG_ROWS,end=Math.min(regPage*REG_ROWS,data.length);
+  document.getElementById('regCount').textContent=`Menampilkan ${start+1}–${end} dari ${data.length} data`;
+  document.getElementById('regTbody').innerHTML=data.slice(start,end).map((r,i)=>`
+    <tr>
+      <td>${r.no}</td>
+      <td><span style="margin-right:5px">📁</span><span class="tbl-link">${r.hierarchy}</span></td>
+      <td class="${r.regulation>0?'tbl-bold':'tbl-gray'}">${r.regulation}</td>
+      <td style="font-weight:${r.obligation>0?600:400}">${r.obligation.toLocaleString('id-ID')}</td>
+      <td class="${r.active>0?'tbl-green':'tbl-gray'}">${r.active}</td>
+      <td style="color:#888">${r.lastUpdate}</td>
+    </tr>`).join('');
+  renderRegPagination(data.length);
+}
+function filterRegulations(){
+  regPage=1;
+  const q=document.getElementById('regSearch').value.toLowerCase();
+  renderRegulations(REGULATIONS.filter(r=>r.hierarchy.toLowerCase().includes(q)));
+}
+function renderRegPagination(total){
+  const pages=Math.ceil(total/REG_ROWS);let html='';
+  for(let i=1;i<=pages;i++)html+=`<button class="page-btn${regPage===i?' active':''}" onclick="goRegPage(${i})">${i}</button>`;
+  if(regPage<pages)html+=`<button class="page-btn" onclick="goRegPage(${regPage+1})">›</button>`;
+  document.getElementById('regPagination').innerHTML=html;
+}
+function goRegPage(p){regPage=p;renderRegulations(filteredRegs);}
+
+// UPDATES
+function renderUpdates(data){
+  document.getElementById('updCount').textContent=`| ${data.length} dari ${UPDATES.length} data`;
+  document.getElementById('updList').innerHTML=`<div>${data.map(item=>`
+    <div class="comp-item">
+      <div class="comp-badges-row">
+        <input type="checkbox" style="accent-color:#e05b18"/>
+        <span class="comp-code">${item.code}</span>${item.tags.map(t=>tagBadge(t)).join('')}
+      </div>
+      <div class="comp-desc">${item.description}</div>
+    </div>`).join('')}</div>`;
+}
+function filterUpdates(){
+  const q=document.getElementById('updSearch').value.toLowerCase();
+  renderUpdates(UPDATES.filter(u=>u.code.toLowerCase().includes(q)||u.description.toLowerCase().includes(q)));
+}
+
+// ACTIVITY
+function renderActivity(){
+  document.getElementById('activityList').innerHTML=ACTIVITIES.map(({user,name,action,target,time,color})=>`
+    <div class="activity-item">
+      <div class="activity-avatar" style="background:${color}">${user}</div>
+      <div><div class="activity-text"><strong>${name}</strong> ${action} <span class="activity-target">${target}</span></div>
+      <div class="activity-time">${time}</div></div>
+    </div>`).join('');
+}
+
+// KEPATUHAN TABLE
+function renderKepatuhan(){
+  document.getElementById('kepatuhan-tbody').innerHTML=KEPATUHAN_DATA.map((r,i)=>`
+    <tr>
+      <td><input type="checkbox" style="accent-color:#e05b18"/></td>
+      <td>${i+1}</td>
+      <td><span class="tbl-link">${r.dasar}</span></td>
+      <td>${r.dilaporkan}</td>
+      <td style="font-size:10px">${r.unit}</td>
+      <td>${r.jenis}</td>
+      <td><span class="badge badge-comply">${r.status}</span></td>
+      <td style="font-size:10px"><span style="color:#2B5298">👤 ${r.creator}</span><br/><span style="color:#aaa">🕐 ${r.tanggal}</span></td>
+      <td class="tbl-actions"><button class="btn-sm-inindya">⋮</button></td>
+    </tr>`).join('');
+}
+
+// ══════════════════════════ INIT ══════════════════════════
+renderDashboard();
+renderPieChart();
+renderCompliance(COMPLIANCE);
+renderSectors(SECTORS);
+renderRegulations(REGULATIONS);
+renderUpdates(UPDATES);
+renderActivity();
+renderKepatuhan();
+
+// Default: show RCS module
+navTo('rcs-home', document.getElementById('nav-rcs-home'));
+</script>
+</body>
+</html>
